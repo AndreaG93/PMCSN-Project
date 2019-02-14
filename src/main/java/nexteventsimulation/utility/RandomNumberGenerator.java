@@ -1,10 +1,13 @@
-package next_event_simulation.utils;
+package nexteventsimulation.utility;
 
-public class RandomVariatesGenerator {
+import nexteventsimulation.utility.API.Rngs;
+import nexteventsimulation.utility.API.Rvgs;
+
+public class RandomNumberGenerator {
 
     private Rvgs rvgs;
 
-    public RandomVariatesGenerator(){
+    public RandomNumberGenerator(){
         this.rvgs = new Rvgs(new Rngs());
         this.rvgs.rngs.plantSeeds(0);
     }

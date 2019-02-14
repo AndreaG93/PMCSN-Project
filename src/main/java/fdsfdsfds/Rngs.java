@@ -1,7 +1,7 @@
-package ComputationalModels;/* -------------------------------------------------------------------------
+package fdsfdsfds;/* -------------------------------------------------------------------------
  * This is an Java library for multi-stream random number generation.
  * The use of this library is recommended as a replacement for the Java
- * class Random, particularly in simulation applications where the
+ * class Random, particularly in next_event_simulation_logic applications where the
  * statistical 'goodness' of the random number generator is important.
  * The library supplies 256 streams of random numbers; use
  * selectStream(s) to switch between streams indexed s = 0,1,...,255.
@@ -12,7 +12,7 @@ package ComputationalModels;/* -------------------------------------------------
  * values dependent on the value of x.  The following convention is used
  * to initialize the default stream:
  *    if x > 0 then x is the state
- *    if x < 0 then the state is obtained from the system clock
+ *    if x < 0 then the state is obtained from the system simulationClock
  *    if x = 0 then the state is to be supplied interactively.
  *
  * The generator used in this library is a so-called 'Lehmer random number
@@ -25,7 +25,7 @@ package ComputationalModels;/* -------------------------------------------------
  *                   Steve Park and Keith Miller
  *              Communications of the ACM, October 1988
  *
- * Name            : ComputationalModels.Rngs.java  (Random Number Generation - Multiple Streams)
+ * Name            : fdsfdsfds.Rngs.java  (Random Number Generation - Multiple Streams)
  * Authors         : Steve Park & Dave Geyer
  * Translated by   : Jun Wang & Richard Dutton
  * Language        : Java
@@ -48,11 +48,11 @@ public class Rngs {
   long A256         = 22925;      /* jump multiplier, DON'T CHANGE THIS VALUE */
 
   /* Barry Lawson 8 Nov 2007 */
-  // Consistent with the changes to the ComputationalModels.Rvgs constructor, the seed[] array and
+  // Consistent with the changes to the fdsfdsfds.Rvgs constructor, the seed[] array and
   // its associated variables should not be declared static.  If they are, 
-  // different instances of the ComputationalModels.Rngs class (which may be considered as
+  // different instances of the fdsfdsfds.Rngs class (which may be considered as
   // _different_ generators) would share the same seed[] array.  Instead,
-  // each ComputationalModels.Rngs instance should have its own copy of seed[].
+  // each fdsfdsfds.Rngs instance should have its own copy of seed[].
 
 //  static long[] seed;                     /* current state of each stream   */
 //  static int  stream        = 0;          /* stream index, 0 is the default */
@@ -79,7 +79,7 @@ public class Rngs {
     // set to DEFAULT even if you don't use PlantSeeds(). The Java 
     // version should do the same, otherwise calls to random() without a
     // preceding plantSeeds() or selectStream() will always return 1.0
-    // (see comments in ComputationalModels.Rvgs.java)
+    // (see comments in fdsfdsfds.Rvgs.java)
     seed[0] = DEFAULT;
     /* Barry Lawson 8 Nov 2007 */
   }
@@ -135,7 +135,7 @@ public class Rngs {
  * Use this function to set the state of the current random number
  * generator stream according to the following conventions:
  *    if x > 0 then x is the state (unless too large)
- *    if x < 0 then the state is obtained from the system clock
+ *    if x < 0 then the state is obtained from the system simulationClock
  *    if x = 0 then the state is to be supplied interactively
  * ---------------------------------------------------------------
  */
@@ -211,8 +211,8 @@ public class Rngs {
     x = getSeed();                    /* get the state of stream 1       */
     ok = ok && (x == A256);           /* x should be the jump multiplier */
     if (ok)
-      System.out.println("\n The implementation_fifo of ComputationalModels.Rngs.java is correct");
+      System.out.println("\n The implementation_fifo of fdsfdsfds.Rngs.java is correct");
     else
-      System.out.println("\n ERROR - the implementation_fifo of ComputationalModels.Rngs.java is not correct");
+      System.out.println("\n ERROR - the implementation_fifo of fdsfdsfds.Rngs.java is not correct");
   }
 }

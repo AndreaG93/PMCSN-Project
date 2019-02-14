@@ -1,4 +1,4 @@
-package ComputationalModels;/* --------------------------------------------------------------------------
+package fdsfdsfds;/* --------------------------------------------------------------------------
  * This is a Java library for generating random variates from six discrete 
  * distributions
  *
@@ -26,7 +26,7 @@ package ComputationalModels;/* -------------------------------------------------
  *                        mean = exp(a + 0.5*b*b)
  *                    variance = (exp(b*b) - 1) * exp(2*a + b*b)
  *
- * Name              : ComputationalModels.Rvgs.java  (Random Variate GeneratorS)
+ * Name              : fdsfdsfds.Rvgs.java  (Random Variate GeneratorS)
  * Authors           : Steve Park & Dave Geyer
  * Translated by     : Richard Dutton & Jun Wang
  * Language          : Java
@@ -34,23 +34,21 @@ package ComputationalModels;/* -------------------------------------------------
  * --------------------------------------------------------------------------
  */
 
-import ComputationalModels.Rngs;
-
 public class Rvgs{
     
     /* Barry Lawson 8 Nov 2007 */
     //
-    // There is no good way to use ComputationalModels.Rvgs along with selectStream because the
-    // original implementation_fifo had the ComputationalModels.Rvgs constructor create its own copy
-    // of an ComputationalModels.Rngs object.
+    // There is no good way to use fdsfdsfds.Rvgs along with selectStream because the
+    // original implementation_fifo had the fdsfdsfds.Rvgs constructor create its own copy
+    // of an fdsfdsfds.Rngs object.
     //
-    // Instead, force the ComputationalModels.Rvgs constructor to have an already-created ComputationalModels.Rngs
+    // Instead, force the fdsfdsfds.Rvgs constructor to have an already-created fdsfdsfds.Rngs
     // object.
 
     public Rngs rngs;
     
-//    public ComputationalModels.Rvgs(){
-//   	  rngs = new ComputationalModels.Rngs();
+//    public fdsfdsfds.Rvgs(){
+//   	  rngs = new fdsfdsfds.Rngs();
 //    }
 
     public Rvgs(Rngs givenRngs)
@@ -60,7 +58,7 @@ public class Rvgs{
          throw new NullPointerException();
       }
       catch(Exception e) {
-        System.out.println("ComputationalModels.Rvgs constructor requires non-null argument");
+        System.out.println("fdsfdsfds.Rvgs constructor requires non-null argument");
       }
       rngs = givenRngs;
     }
