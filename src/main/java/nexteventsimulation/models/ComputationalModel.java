@@ -1,8 +1,8 @@
 package nexteventsimulation.models;
 
 import nexteventsimulation.NextEventSimulation;
-import nexteventsimulation.utility.Event;
-import nexteventsimulation.utility.SimulationClock;
+import nexteventsimulation.utility.SimulatedEvent;
+import nexteventsimulation.utility.SimulatedClock;
 import nexteventsimulation.utility.RandomNumberGenerator;
 
 import java.util.Iterator;
@@ -11,8 +11,8 @@ import java.util.PriorityQueue;
 
 public abstract class ComputationalModel implements NextEventSimulation {
 
-    protected PriorityQueue<Event> eventList = new PriorityQueue<Event>();
-    protected SimulationClock simulationClock = new SimulationClock();
+    protected PriorityQueue<SimulatedEvent> eventList = new PriorityQueue<SimulatedEvent>();
+    protected SimulatedClock simulationClock = new SimulatedClock();
     protected RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
 
     protected abstract void initializeSystemStateVariables();
@@ -32,7 +32,7 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
         while (!isSimulationFinalStateReached()){
 
-            Event actualEvent = this.eventList.poll();
+            SimulatedEvent actualEvent = this.eventList.poll();
 
             if (actualEvent != null) {
 
@@ -40,7 +40,7 @@ public abstract class ComputationalModel implements NextEventSimulation {
                 actualEvent.perform();
                 actualEvent.scheduleFollowingEvent();
 
-                Event nextEvent = this.eventList.peek();
+                SimulatedEvent nextEvent = this.eventList.peek();
 
                 if (nextEvent != null)
                     this.advanceSimulationNextEventClockTo(nextEvent.getTime());

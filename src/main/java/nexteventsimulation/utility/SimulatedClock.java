@@ -1,6 +1,6 @@
 package nexteventsimulation.utility;
 
-public class SimulationClock {
+public class SimulatedClock {
 
     private double time;
     private double nextEventTime;

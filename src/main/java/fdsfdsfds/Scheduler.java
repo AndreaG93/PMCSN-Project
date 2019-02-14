@@ -1,15 +1,15 @@
 package fdsfdsfds;
 
-import nexteventsimulation.utility.Event;
+import nexteventsimulation.utility.SimulatedEvent;
 
 import java.util.PriorityQueue;
 
 public class Scheduler {
 
-    /*
-    private PriorityQueue<Event> priorityQueue = new PriorityQueue<Event>();
 
-    public void schedule(Event event) throws Exception {
+    private PriorityQueue<SimulatedEvent> priorityQueue = new PriorityQueue<SimulatedEvent>();
+
+    public void schedule(SimulatedEvent event) throws Exception {
 
         if (event.getTime() < 0)
             throw new Exception("Invalid event-time.");
@@ -17,9 +17,9 @@ public class Scheduler {
         this.priorityQueue.add(event);
     }
 
-    public void removeScheduledEvent(Event event){
+    public void removeScheduledEvent(SimulatedEvent event){
 
     }
 
-*/
+
 }

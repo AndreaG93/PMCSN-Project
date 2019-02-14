@@ -1,4 +1,4 @@
-package nexteventsimulation.models.singleserver.event.implementation;
+package nexteventsimulation.models.singleserver.event.type;
 
 import nexteventsimulation.models.singleserver.event.SingleServerEvent;
 

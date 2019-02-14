@@ -17,15 +17,15 @@ public class JUnitEventList {
 
 
 
-        PriorityQueue<Event> eventList = new PriorityQueue<Event>();
+        PriorityQueue<SimulatedEvent> eventList = new PriorityQueue<SimulatedEvent>();
 
-        Event firstEvent = new Event();
+        SimulatedEvent firstEvent = new SimulatedEvent();
         firstEvent.setTime(FIRST_SCHEDULED_TIME);
 
-        Event secondEvent = new Event();
+        SimulatedEvent secondEvent = new SimulatedEvent();
         secondEvent.setTime(SECOND_SCHEDULED_TIME);
 
-        Event thirdEvent = new Event();
+        SimulatedEvent thirdEvent = new SimulatedEvent();
         thirdEvent.setTime(THIRD_SCHEDULED_TIME);
 
 
@@ -36,7 +36,7 @@ public class JUnitEventList {
         eventList.add(secondEvent);
         eventList.add(firstEvent);
 
-        Event retrievedObject;
+        SimulatedEvent retrievedObject;
 
         retrievedObject = eventList.poll();
         assertNotNull(retrievedObject);

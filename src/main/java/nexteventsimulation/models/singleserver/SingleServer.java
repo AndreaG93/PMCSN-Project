@@ -2,8 +2,8 @@ package nexteventsimulation.models.singleserver;
 
 import nexteventsimulation.models.ComputationalModel;
 import nexteventsimulation.models.singleserver.event.SingleServerEvent;
-import nexteventsimulation.models.singleserver.event.implementation.JobArrivalEvent;
-import nexteventsimulation.models.singleserver.event.implementation.JobDepartureEvent;
+import nexteventsimulation.models.singleserver.event.type.JobArrivalEvent;
+import nexteventsimulation.models.singleserver.event.type.JobDepartureEvent;
 
 import java.util.HashMap;
 import java.util.Map;

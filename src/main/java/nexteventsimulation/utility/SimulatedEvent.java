@@ -1,8 +1,8 @@
 package nexteventsimulation.utility;
 
-public abstract class Event implements Comparable<Event> {
+public abstract class SimulatedEvent implements Comparable<SimulatedEvent> {
 
-    private double time;
+    protected double time;
 
     public abstract void perform();
 
@@ -17,7 +17,7 @@ public abstract class Event implements Comparable<Event> {
     }
 
     @Override
-    public int compareTo(Event o) {
+    public int compareTo(SimulatedEvent o) {
         return Double.compare(this.time, o.time);
     }
 }
