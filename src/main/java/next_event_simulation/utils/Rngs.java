@@ -1,4 +1,4 @@
-package ComputationalModels;/* -------------------------------------------------------------------------
+package next_event_simulation.utils;/* -------------------------------------------------------------------------
  * This is an Java library for multi-stream random number generation.
  * The use of this library is recommended as a replacement for the Java
  * class Random, particularly in simulation applications where the
@@ -33,8 +33,10 @@ package ComputationalModels;/* -------------------------------------------------
  * ------------------------------------------------------------------------- 
  */
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
 
 
 public class Rngs {

@@ -1,11 +1,11 @@
-package NextEventSimulation;
+package next_event_simulation;
 
-import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Method;
 
 public class Event implements Comparable<Event> {
 
     private double scheduledTime;
+
     private Method methodToInvokeWhenEventOccurs;
     private Method methodToInvokeForNextEventScheduling;
     private Object system;
@@ -31,15 +31,16 @@ public class Event implements Comparable<Event> {
     }
 
 
-    public void perform() {
+    void perform() {
         try {
             this.methodToInvokeWhenEventOccurs.invoke(system);
         } catch (Exception p) {
+            System.out.println(p.getMessage());
             System.exit(1);
         }
     }
 
-    public void scheduleNextRelatedEvent() {
+    void scheduleNextRelatedEvent() {
         try {
             this.methodToInvokeForNextEventScheduling.invoke(system);
         } catch (Exception p) {
@@ -47,16 +48,15 @@ public class Event implements Comparable<Event> {
         }
     }
 
-
+    @Override
     public int compareTo(Event o) {
-
-        if (this.getScheduledTime() < o.getScheduledTime())
-            return -1;
-        else if (this.getScheduledTime() == o.getScheduledTime()) {
-            return 1;
-        } else
-
-
-            return 0;
+        return Double.compare(this.scheduledTime, o.scheduledTime);
     }
+
+/*
+    @Override
+    public int compareTo(Event o) {
+        return Double.compare(this.getScheduledTime(), o.getScheduledTime());
+    }
+    */
 }

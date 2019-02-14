@@ -1,23 +1,17 @@
-package ComputationalModels;
-
-
-import NextEventSimulation.Event;
-import NextEventSimulation.NextEventSimulationComputationalModel;
+import next_event_simulation.Event;
+import next_event_simulation.NextEventSimulationComputationalModel;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.PriorityQueue;
 
-public class SingleServerServiceNode implements NextEventSimulationComputationalModel {
+public class SingleServerServiceNode extends NextEventSimulationComputationalModel {
 
     private final double INITIAL_TIME = 0.0;
     private final double TERMINAL_TIME = 20000.0;
 
-    private Rvgs randomVariatesGenerator;
     private int numberOfJobs;
     private int departedJobs;
-    private SimulationClock simulationClock;
 
     private double timeAveragedNumberOfJobs = 0;
     private double timeAveragedServiceTime = 0;
@@ -27,13 +21,7 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
     private Method methodUsedToScheduleNextEventAfterJobDepartureEvent;
     private Method methodUsedToScheduleNextEventAfterJobArrivalEvent;
 
-    private PriorityQueue<Event> eventsCalendar;
-
     public SingleServerServiceNode() {
-        randomVariatesGenerator = new Rvgs(new Rngs());
-        randomVariatesGenerator.rngs.plantSeeds(0);
-
-        eventsCalendar = new PriorityQueue<Event>();
 
         try {
             methodUsedToProcessJobDepartureEvent = this.getClass().getDeclaredMethod("ProcessJobDepartureEvent");
@@ -48,52 +36,26 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
 
     public void initializeSystemStateVariables() {
         numberOfJobs = 0;
+        departedJobs = 0;
     }
 
     public void initializeSimulationClock() {
-        simulationClock = new SimulationClock();
-        simulationClock.setCurrentTime(INITIAL_TIME);
+        nextEventSimulationClock.setCurrentTime(INITIAL_TIME);
     }
 
     public void ScheduleInitialEvent() {
-        scheduleJobArrivalEvent(INITIAL_TIME + getExponentialInterArrivalTime());
+        scheduleJobArrivalEvent(INITIAL_TIME + randomVariatesGenerator.getExponentialInterArrivalTime());
     }
 
-    public void advanceSimulationClockToNextScheduledEvent() {
-
-        Event nextEvent = this.eventsCalendar.peek();
-
-        if (nextEvent != null) {
-            simulationClock.setCurrentTime(nextEvent.getScheduledTime());
-        }
-    }
-
-    public void performNextScheduledEvent() {
-
-        Event nextEvent = this.eventsCalendar.peek();
-
-        if (nextEvent != null) {
-            nextEvent.perform();
-        }
-    }
-
-    public void scheduleNextEvent() {
-
-        Event currentEvent = this.eventsCalendar.poll();
-
-        if (currentEvent != null)
-            currentEvent.scheduleNextRelatedEvent();
-    }
 
     public void updateStatistics() {
-        timeAveragedNumberOfJobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentTime()) * numberOfJobs;
-        timeAveragedServiceTime += (simulationClock.getNextEventTime() - simulationClock.getCurrentTime());
-    }
+        timeAveragedNumberOfJobs += (nextEventSimulationClock.getNextEventTime() - nextEventSimulationClock.getCurrentTime()) * numberOfJobs;
+        timeAveragedServiceTime += (nextEventSimulationClock.getNextEventTime() - nextEventSimulationClock.getCurrentTime());
 
-    public boolean isEndingConditionReached() {
-        return this.eventsCalendar.isEmpty();
+        if (nextEventSimulationClock.getNextEventTime() - nextEventSimulationClock.getCurrentTime() == 0){
+            System.exit(33);
+        }
     }
-
 
     public void ProcessJobArrivalEvent() {
         numberOfJobs++;
@@ -106,15 +68,14 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
 
     public void scheduleNextEventAfterJobArrivalEvent() {
 
-        double nextArrivalTime = this.simulationClock.getCurrentTime() + getExponentialInterArrivalTime();
+        double nextArrivalTime = this.nextEventSimulationClock.getCurrentTime() + randomVariatesGenerator.getExponentialInterArrivalTime();
 
         if (nextArrivalTime < TERMINAL_TIME) {
-            if (numberOfJobs == 1)
-                scheduleJobDepartureEvent();
-            else {
-                scheduleJobArrivalEvent(nextArrivalTime);
-            }
+            scheduleJobArrivalEvent(nextArrivalTime);
         }
+
+        if (numberOfJobs == 1)
+            scheduleJobDepartureEvent();
     }
 
     public void scheduleNextEventAfterJobDepartureEvent() {
@@ -125,7 +86,8 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
     }
 
 
-    private void scheduleJobArrivalEvent(double nextArrivalTime) {
+    public void scheduleJobArrivalEvent(double nextArrivalTime) {
+
         Event nextDepartureEvent = new Event();
 
         nextDepartureEvent.setMethodToInvokeWhenEventOccurs(this.methodUsedToProcessJobArrivalEvent);
@@ -134,19 +96,19 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
 
         nextDepartureEvent.setScheduledTime(nextArrivalTime);
 
-        this.eventsCalendar.add(nextDepartureEvent);
+        this.eventList.add(nextDepartureEvent);
     }
 
-    private void scheduleJobDepartureEvent() {
+    public void scheduleJobDepartureEvent() {
         Event nextDepartureEvent = new Event();
 
         nextDepartureEvent.setMethodToInvokeWhenEventOccurs(this.methodUsedToProcessJobDepartureEvent);
         nextDepartureEvent.setMethodToInvokeForNextEventScheduling(this.methodUsedToScheduleNextEventAfterJobDepartureEvent);
         nextDepartureEvent.setSystem(this);
 
-        nextDepartureEvent.setScheduledTime(this.simulationClock.getCurrentTime() + getErlangDistributedServiceTime());
+        nextDepartureEvent.setScheduledTime(this.nextEventSimulationClock.getCurrentTime() + randomVariatesGenerator.getErlangDistributedServiceTime());
 
-        this.eventsCalendar.add(nextDepartureEvent);
+        this.eventList.add(nextDepartureEvent);
     }
 
 
@@ -157,21 +119,12 @@ public class SingleServerServiceNode implements NextEventSimulationComputational
         System.out.println(departedJobs);
         simulationResults.put("Job", Double.valueOf(departedJobs));
         simulationResults.put("Average service time", timeAveragedServiceTime / departedJobs);
-        simulationResults.put("Average number of Job", timeAveragedNumberOfJobs / departedJobs);
+        simulationResults.put("Average number of Job", timeAveragedNumberOfJobs / nextEventSimulationClock.getCurrentTime());
+        simulationResults.put("Average wait", timeAveragedNumberOfJobs / departedJobs);
+        simulationResults.put("utili", timeAveragedServiceTime / nextEventSimulationClock.getCurrentTime());
 
         return simulationResults;
     }
 
-    private double getExponentialInterArrivalTime() {
 
-        randomVariatesGenerator.rngs.selectStream(0);
-        return randomVariatesGenerator.exponential(2.0);
-    }
-
-
-    private double getErlangDistributedServiceTime() {
-
-        randomVariatesGenerator.rngs.selectStream(1);
-        return randomVariatesGenerator.erlang(5, 0.3);
-    }
 }

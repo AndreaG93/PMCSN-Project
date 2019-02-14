@@ -1,18 +1,13 @@
-import ComputationalModels.SingleServerServiceNode;
-import NextEventSimulation.NextEventSimulation;
+import next_event_simulation.NextEventSimulationOrchestrator;
 
 public class EntryPoint {
 
+    public static void main(String args[]) {
 
+        SingleServerServiceNode ComputationalModel = new SingleServerServiceNode();
+        NextEventSimulationOrchestrator simulationOrchestrator = new NextEventSimulationOrchestrator(ComputationalModel);
 
-    public static void main(String args[])
-    {
-
-        SingleServerServiceNode x = new SingleServerServiceNode();
-        NextEventSimulation sim = new NextEventSimulation(x);
-
-        sim.execute();
+        simulationOrchestrator.executeSimulation();
     }
-
-
 }
+

@@ -1,4 +1,4 @@
-package ComputationalModels;/* --------------------------------------------------------------------------
+package next_event_simulation.utils;/* --------------------------------------------------------------------------
  * This is a Java library for generating random variates from six discrete 
  * distributions
  *
@@ -34,8 +34,6 @@ package ComputationalModels;/* -------------------------------------------------
  * --------------------------------------------------------------------------
  */
 
-import ComputationalModels.Rngs;
-
 public class Rvgs{
     
     /* Barry Lawson 8 Nov 2007 */
@@ -47,7 +45,7 @@ public class Rvgs{
     // Instead, force the ComputationalModels.Rvgs constructor to have an already-created ComputationalModels.Rngs
     // object.
 
-    public Rngs rngs;
+    Rngs rngs;
     
 //    public ComputationalModels.Rvgs(){
 //   	  rngs = new ComputationalModels.Rngs();

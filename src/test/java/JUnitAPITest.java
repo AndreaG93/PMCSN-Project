@@ -25,7 +25,7 @@ public class JUnitAPITest {
     public void test2() {
 
 
-
+/*
         PriorityQueue<Double> ff = new PriorityQueue<Double>(new Comparator<Double>() {
             public int compare(Double o1, Double o2) {
                 return (int) (o2.doubleValue() - o1.doubleValue());
@@ -41,7 +41,7 @@ public class JUnitAPITest {
         assertEquals(5.9, ff.poll());
         assertEquals(4.0, ff.poll());
 
-
+*/
     }
 
 
