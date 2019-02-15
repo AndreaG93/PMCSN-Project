@@ -1,4 +1,4 @@
-package nexteventsimulation.models;
+package nexteventsimulation.computationalmodel;
 
 import nexteventsimulation.NextEventSimulation;
 import nexteventsimulation.utility.SimulatedEvent;
@@ -80,5 +80,14 @@ public abstract class ComputationalModel implements NextEventSimulation {
             System.out.println(pair.getKey());
             System.out.println(pair.getValue());
         }
+    }
+
+
+    public SimulatedClock getSimulationClock() {
+        return simulationClock;
+    }
+
+    public RandomNumberGenerator getRandomNumberGenerator() {
+        return randomNumberGenerator;
     }
 }

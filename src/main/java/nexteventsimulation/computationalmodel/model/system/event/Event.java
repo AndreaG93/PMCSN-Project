@@ -1,18 +1,17 @@
-package nexteventsimulation.models.cloudsystemusingalgorithm1.event;
+package nexteventsimulation.computationalmodel.model.system.event;
 
-import nexteventsimulation.models.cloudsystemusingalgorithm1.SystemUsingAlgorithm1;
-import nexteventsimulation.models.cloudsystemusingalgorithm1.component.Component;
+import nexteventsimulation.computationalmodel.model.system.SystemUsingRoutingAlgorithm1;
+import nexteventsimulation.computationalmodel.model.system.component.Component;
 import nexteventsimulation.utility.SimulatedEvent;
 
 public abstract class Event extends SimulatedEvent {
 
-
     protected Component component;
-    protected SystemUsingAlgorithm1 system;
+    protected SystemUsingRoutingAlgorithm1 system;
 
     protected boolean acceptedOnCloud = false;
 
-    public void setSystem(SystemUsingAlgorithm1 system) {
+    public void setSystem(SystemUsingRoutingAlgorithm1 system) {
         this.system = system;
     }
 

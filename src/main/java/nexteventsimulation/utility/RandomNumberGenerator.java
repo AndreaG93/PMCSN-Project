@@ -18,6 +18,19 @@ public class RandomNumberGenerator {
         return this.rvgs.exponential(2.0);
     }
 
+    public double getExponentialInterArrivalTime(int stream, double rate) {
+
+        this.rvgs.rngs.selectStream(stream);
+        return this.rvgs.exponential(rate);
+    }
+
+    public double getExponential(int stream, double rate) {
+
+        this.rvgs.rngs.selectStream(stream);
+        return this.rvgs.exponential(rate);
+    }
+
+
     public double getErlangDistributedServiceTime() {
 
         this.rvgs.rngs.selectStream(1);
