@@ -12,8 +12,8 @@ public class EntryPoint {
         if (simulation1 != null)
             simulation1.perform();
 
-        if (simulation2 != null)
-            simulation2.perform();
+        //if (simulation2 != null)
+        //    simulation2.perform();
 
     }
 }

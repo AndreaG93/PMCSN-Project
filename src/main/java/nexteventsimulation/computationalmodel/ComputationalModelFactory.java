@@ -6,9 +6,10 @@ public class ComputationalModelFactory {
 
     public static ComputationalModel built(String computationalModelName, String version) {
 
-        String mClassName = MessageFormat.format("{0}.model.{1}.{1}{2}",
+        String mClassName = MessageFormat.format("{0}.model.{1}.{2}{3}",
                 ComputationalModelFactory.class.getPackage().getName(),
                 computationalModelName.toLowerCase(),
+                computationalModelName,
                 version);
 
         try {

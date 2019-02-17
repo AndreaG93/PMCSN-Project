@@ -6,6 +6,6 @@ public class SystemUsingRoutingAlgorithm1 extends System {
 
     public SystemUsingRoutingAlgorithm1() {
         super();
-        this.controller = new ControllerUsingRoutingAlgorithm1();
+        this.controller = new ControllerUsingRoutingAlgorithm1(this);
     }
 }

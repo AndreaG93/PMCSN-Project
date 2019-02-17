@@ -1,10 +1,16 @@
 package nexteventsimulation.computationalmodel.model.system.component.type.subtype;
 
+import nexteventsimulation.computationalmodel.model.system.System;
+import nexteventsimulation.computationalmodel.model.system.SystemUsingRoutingAlgorithm1;
 import nexteventsimulation.computationalmodel.model.system.component.type.Controller;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobArrival;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobArrival;
 
 public class ControllerUsingRoutingAlgorithm1 extends Controller {
+
+    public ControllerUsingRoutingAlgorithm1(System system) {
+        super(system);
+    }
 
     @Override
     public void scheduleFollowingEventAfterClass1JobArrival() {

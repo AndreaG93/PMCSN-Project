@@ -1,11 +1,13 @@
 package nexteventsimulation.computationalmodel.model.system.component;
 
+import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.computationalmodel.model.system.SystemUsingRoutingAlgorithm1;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulatedClock;
 
-public abstract class Component {
+import java.util.Map;
 
+public abstract class Component {
 
     protected double class1AverageArrivalRate;
     protected double class2AverageArrivalRate;
@@ -17,13 +19,17 @@ public abstract class Component {
     protected int numberOfClass1DepartedJobs;
     protected int numberOfClass2DepartedJobs;
 
-    protected double timeAveragedNumberOfClass1Jobs = 0;
-    protected double timeAveragedNumberOfClass2Jobs = 0;
-    protected double timeAveragedServiceTime = 0;
+    private double timeAveragedNumberOfClass1Jobs = 0;
+    private double timeAveragedNumberOfClass2Jobs = 0;
+    private double timeAveragedServiceTime = 0;
 
-    protected SystemUsingRoutingAlgorithm1 system;
+    protected System system;
 
-    public void initializeSystemStateVariables(){
+    public Component(System system) {
+        this.system = system;
+    }
+
+    public void initializeSystemStateVariables() {
         this.numberOfClass1Jobs = 0;
         this.numberOfClass2Jobs = 0;
         this.numberOfClass1DepartedJobs = 0;
@@ -31,57 +37,61 @@ public abstract class Component {
     }
 
 
-
-
-
-
-
     private boolean isEmpty() {
         return (numberOfClass1Jobs + numberOfClass2Jobs) == 0;
     }
 
 
+    public void updateStatistics() {
 
-
-
-
-    public void updateStatistics(SimulatedClock clock) {
+        SimulatedClock clock = this.system.getSimulationClock();
 
         if (!this.isEmpty()) {
             timeAveragedNumberOfClass1Jobs += (clock.getNextEventTime() - clock.getTime()) * numberOfClass1Jobs;
             timeAveragedNumberOfClass2Jobs += (clock.getNextEventTime() - clock.getTime()) * numberOfClass2Jobs;
-            timeAveragedServiceTime += (clock.getNextEventTime() - clock.getTime());
+            //timeAveragedServiceTime += (clock.getNextEventTime() - clock.getTime());
         }
     }
 
+    public Map<String, Double> getStatistics(){
 
 
-    protected double getNextClass1JobDepartureTime(){
-        SimulatedClock simulationClock = this.system.getSimulationClock();
-        RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
+        SimulatedClock clock = this.system.getSimulationClock();
 
-        return simulationClock.getTime() + randomNumberGenerator.getExponential(0, this.class1AverageServiceRate);
+        java.lang.System.out.println("Average Number class 1 jobs" +
+                String.format(timeAveragedNumberOfClass1Jobs / clock.getTime()));
+
+
+
     }
 
-    protected double getNextClass2JobDepartureTime(){
-        SimulatedClock simulationClock = this.system.getSimulationClock();
-        RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
 
-        return simulationClock.getTime() + randomNumberGenerator.getExponential(1, this.class2AverageServiceRate);
-    }
-
-    protected double getNextClass1JobArrivalTime(){
+    protected double getNextClass1JobArrivalTime() {
         SimulatedClock simulationClock = this.system.getSimulationClock();
         RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
 
         return simulationClock.getTime() + randomNumberGenerator.getExponential(0, this.class1AverageArrivalRate);
     }
 
-    protected double getNextClass2JobArrivalTime(){
+    protected double getNextClass1JobDepartureTime() {
         SimulatedClock simulationClock = this.system.getSimulationClock();
         RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
 
-        return simulationClock.getTime() + randomNumberGenerator.getExponential(0, this.class2AverageArrivalRate);
+        return simulationClock.getTime() + randomNumberGenerator.getExponential(1, this.class1AverageServiceRate);
+    }
+
+    protected double getNextClass2JobArrivalTime() {
+        SimulatedClock simulationClock = this.system.getSimulationClock();
+        RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
+
+        return simulationClock.getTime() + randomNumberGenerator.getExponential(2, this.class2AverageArrivalRate);
+    }
+
+    protected double getNextClass2JobDepartureTime() {
+        SimulatedClock simulationClock = this.system.getSimulationClock();
+        RandomNumberGenerator randomNumberGenerator = this.system.getRandomNumberGenerator();
+
+        return simulationClock.getTime() + randomNumberGenerator.getExponential(3, this.class2AverageServiceRate);
     }
 
     public abstract void updateStatusAfterClass1JobArrival();
@@ -95,6 +105,8 @@ public abstract class Component {
     public abstract void scheduleFollowingEventAfterClass1JobArrival();
 
     public abstract void scheduleFollowingEventAfterClass2JobArrival();
+
+    public abstract void scheduleInitialEvent();
 
     public int getNumberOfClass1Jobs() {
         return numberOfClass1Jobs;

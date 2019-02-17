@@ -1,13 +1,12 @@
 package nexteventsimulation.computationalmodel.model.system;
 
 import nexteventsimulation.computationalmodel.ComputationalModel;
+import nexteventsimulation.computationalmodel.model.system.component.type.Controller;
 import nexteventsimulation.computationalmodel.model.system.event.Event;
 import nexteventsimulation.computationalmodel.model.system.component.Component;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloud;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloudlet;
 import nexteventsimulation.computationalmodel.model.system.event.EventFactory;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobArrival;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobArrival;
 import nexteventsimulation.utility.SimulatedClock;
 
 import java.util.Map;
@@ -23,8 +22,8 @@ public abstract class System extends ComputationalModel {
     Component controller;
 
     public System() {
-        this.cloud = new Cloud();
-        this.cloudlet = new Cloudlet();
+        this.cloud = new Cloud(this);
+        this.cloudlet = new Cloudlet(this);
     }
 
     @Override
@@ -41,16 +40,13 @@ public abstract class System extends ComputationalModel {
 
     @Override
     protected void scheduleInitialEvent() {
-
-        double class1JobArrivalTime = this.randomNumberGenerator.getExponentialInterArrivalTime(0, 1);
-        double class2JobArrivalTime = this.randomNumberGenerator.getExponentialInterArrivalTime(1, 1);
-
-        scheduleControllerEvent(Class1JobArrival.class, class1JobArrivalTime);
-        scheduleControllerEvent(Class2JobArrival.class, class2JobArrivalTime);
+        this.controller.scheduleInitialEvent();
     }
 
     @Override
     protected void updateStatistics() {
+        this.cloud.updateStatistics();
+        this.cloudlet.updateStatistics();
     }
 
     @Override
@@ -59,7 +55,6 @@ public abstract class System extends ComputationalModel {
     }
 
     public void scheduleControllerEvent(Class eventClass, double time) {
-
         if (time < this.simulationStopTime)
             scheduleEvent(eventClass, this.controller, time);
     }
@@ -72,7 +67,7 @@ public abstract class System extends ComputationalModel {
         scheduleEvent(eventClass, this.cloudlet, time);
     }
 
-    private void scheduleEvent(Class eventClass, Component component, double time){
+    private void scheduleEvent(Class eventClass, Component component, double time) {
 
         Event event = EventFactory.built(eventClass.getSimpleName());
         event.setTime(time);
@@ -81,7 +76,7 @@ public abstract class System extends ComputationalModel {
         this.eventList.add(event);
     }
 
-    public double getActualClockTime(){
+    public double getActualClockTime() {
         return this.simulationClock.getTime();
     }
 
@@ -93,12 +88,11 @@ public abstract class System extends ComputationalModel {
         return threshold;
     }
 
-    public int getNumberOfClass1JobOnCloudlet(){
+    public int getNumberOfClass1JobOnCloudlet() {
         return this.cloudlet.getNumberOfClass1Jobs();
     }
 
-    public int getNumberOfClass2JobOnCloudlet(){
+    public int getNumberOfClass2JobOnCloudlet() {
         return this.cloudlet.getNumberOfClass1Jobs();
     }
-
 }
