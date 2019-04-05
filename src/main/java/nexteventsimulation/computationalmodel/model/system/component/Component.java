@@ -53,15 +53,16 @@ public abstract class Component {
         }
     }
 
-    public Map<String, Double> getStatistics(){
+    public Map<String, Double> getStatistics() {
 
-
+/*
         SimulatedClock clock = this.system.getSimulationClock();
 
         java.lang.System.out.println("Average Number class 1 jobs" +
                 String.format(timeAveragedNumberOfClass1Jobs / clock.getTime()));
 
-
+*/
+        return null;
 
     }
 

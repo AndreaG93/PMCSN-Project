@@ -28,6 +28,7 @@ public class ControllerUsingRoutingAlgorithm1 extends Controller {
 
         int n1 = this.system.getNumberOfClass1JobOnCloudlet();
         int n2 = this.system.getNumberOfClass2JobOnCloudlet();
+
         double actualTime = this.system.getActualClockTime();
 
         if ((n1 + n2) == this.system.getThreshold())

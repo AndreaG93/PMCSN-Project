@@ -34,7 +34,6 @@ public abstract class Controller extends Component {
     public void updateStatistics() {
     }
 
-
     public void scheduleInitialEvent() {
         this.system.scheduleControllerEvent(Class1JobArrival.class, this.getNextClass2JobArrivalTime());
         this.system.scheduleControllerEvent(Class2JobArrival.class, this.getNextClass2JobArrivalTime());
