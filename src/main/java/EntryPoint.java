@@ -1,20 +1,16 @@
 import nexteventsimulation.NextEventSimulation;
 
-import nexteventsimulation.computationalmodel.ComputationalModelFactory;
+import nexteventsimulation.computationalmodel.model.system.SystemFactory;
 
 public class EntryPoint {
 
     public static void main(String args[]) {
 
-        NextEventSimulation simulation1 = ComputationalModelFactory.built("System", "UsingRoutingAlgorithm1");
-        NextEventSimulation simulation2 = ComputationalModelFactory.built("System", "UsingRoutingAlgorithm2");
+        NextEventSimulation simulation1 = SystemFactory.buildSystemUsingRoutingAlgorithm1();
+        NextEventSimulation simulation2 = SystemFactory.buildSystemUsingRoutingAlgorithm2();
 
-        if (simulation1 != null)
-            simulation1.perform();
-
-        //if (simulation2 != null)
-        //    simulation2.perform();
-
+        simulation1.perform();
+        simulation2.perform();
     }
 }
 

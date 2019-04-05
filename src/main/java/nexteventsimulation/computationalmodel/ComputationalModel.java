@@ -1,9 +1,8 @@
 package nexteventsimulation.computationalmodel;
 
 import nexteventsimulation.NextEventSimulation;
-import nexteventsimulation.utility.SimulatedEvent;
-import nexteventsimulation.utility.SimulatedClock;
-import nexteventsimulation.utility.RandomNumberGenerator;
+import nexteventsimulation.utility.SimulationClock;
+import nexteventsimulation.utility.SimulationEvent;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -11,9 +10,7 @@ import java.util.PriorityQueue;
 
 public abstract class ComputationalModel implements NextEventSimulation {
 
-    protected PriorityQueue<SimulatedEvent> eventList = new PriorityQueue<SimulatedEvent>();
-    protected SimulatedClock simulationClock = new SimulatedClock();
-    protected RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+    protected PriorityQueue<SimulationEvent> eventList;
 
     protected abstract void initializeSystemStateVariables();
 
@@ -30,22 +27,21 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
         initializeSimulation();
 
-        while (!isSimulationFinalStateReached()){
+        while (!isSimulationFinalStateReached()) {
 
-            SimulatedEvent actualEvent = this.eventList.poll();
+            SimulationEvent actualEvent = this.eventList.poll();
 
             if (actualEvent != null) {
 
-                advanceSimulationClockTo(actualEvent.getTime());
+                SimulationClock.getInstance().setCurrentEventTime(actualEvent.getStartTime());
+
                 actualEvent.perform();
                 actualEvent.scheduleFollowingEvent();
 
-                SimulatedEvent nextEvent = this.eventList.peek();
+                SimulationEvent nextEvent = this.eventList.peek();
 
                 if (nextEvent != null)
-                    this.advanceSimulationNextEventClockTo(nextEvent.getTime());
-
-
+                    SimulationClock.getInstance().setNextEventTime(nextEvent.getStartTime());
             }
             updateStatistics();
         }
@@ -62,15 +58,7 @@ public abstract class ComputationalModel implements NextEventSimulation {
         return this.eventList.isEmpty();
     }
 
-    private void advanceSimulationClockTo(double time){
-        this.simulationClock.setTime(time);
-    }
-
-    private void advanceSimulationNextEventClockTo(double time){
-        this.simulationClock.setNextEventTime(time);
-    }
-
-    private void printSimulationResults(){
+    private void printSimulationResults() {
 
         Map<String, Double> results = getSimulationResults();
 
@@ -80,14 +68,5 @@ public abstract class ComputationalModel implements NextEventSimulation {
             System.out.println(pair.getKey());
             System.out.println(pair.getValue());
         }
-    }
-
-
-    public SimulatedClock getSimulationClock() {
-        return simulationClock;
-    }
-
-    public RandomNumberGenerator getRandomNumberGenerator() {
-        return randomNumberGenerator;
     }
 }

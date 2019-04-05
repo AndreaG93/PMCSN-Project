@@ -2,6 +2,7 @@ package nexteventsimulation.computationalmodel.model.system.component.type.subty
 
 import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.computationalmodel.model.system.component.type.Controller;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobArrival;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobArrival;
 
@@ -13,37 +14,32 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
     }
 
     @Override
-    public void scheduleFollowingEventAfterClass1JobArrival() {
+    protected void performRoutingAlgorithm(SystemEvent event) {
 
         int n1 = this.system.getNumberOfClass1JobOnCloudlet();
         int n2 = this.system.getNumberOfClass2JobOnCloudlet();
-        double actualTime = this.system.getActualClockTime();
 
-        if (n1 == this.system.getThreshold())
-            this.system.scheduleCloudEvent(Class1JobArrival.class, actualTime);
-        else if ((n1 + n2) < this.system.getThreshold()) {
+        if (event instanceof Class1JobArrival){
 
-        } else if (n2 > 0) {
-            this.system.scheduleCloudletEvent(Class1JobArrival.class, actualTime);
-        } else
-            this.system.scheduleCloudletEvent(Class1JobArrival.class, actualTime);
+            if (n1 == this.system.getThreshold())
+                this.system.scheduleEventOnCloud(event, 0);
+            else if (n1 + n2 < this.system.getThreshold() && n2 > 0){
 
+                this.system.scheduleEventOnCloudlet(event, 0);
 
-        this.system.scheduleControllerEvent(Class1JobArrival.class, this.getNextClass1JobArrivalTime());
-    }
+                this.system.removeFarthermostCloudletClass2JobDeparture();
 
-    @Override
-    public void scheduleFollowingEventAfterClass2JobArrival() {
+                this.system.scheduleEventOnCloud(event, 0);
 
-        int n1 = this.system.getNumberOfClass1JobOnCloudlet();
-        int n2 = this.system.getNumberOfClass2JobOnCloudlet();
-        double actualTime = this.system.getActualClockTime();
+            } else
+                this.system.scheduleEventOnCloudlet(event, 0);
 
-        if ((n1 + n2) >= this.system.getThreshold())
-            this.system.scheduleCloudEvent(Class2JobArrival.class, actualTime);
-        else
-            this.system.scheduleCloudletEvent(Class2JobArrival.class, actualTime);
+        } else {
 
-        this.system.scheduleControllerEvent(Class2JobArrival.class, this.getNextClass2JobArrivalTime());
+            if ((n1 + n2) >= this.system.getThreshold())
+                this.system.scheduleEventOnCloud(event, 0);
+            else
+                this.system.scheduleEventOnCloudlet(event, 0);
+        }
     }
 }

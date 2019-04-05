@@ -1,12 +1,12 @@
 package nexteventsimulation.computationalmodel.model.system.component.type;
 
 import nexteventsimulation.computationalmodel.model.system.System;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobDeparture;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
-import nexteventsimulation.computationalmodel.model.system.component.Component;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
+import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 
 
-public class Cloud extends Component {
+public class Cloud extends SystemComponent {
 
     public Cloud(System system){
         super(system);
@@ -35,16 +35,6 @@ public class Cloud extends Component {
     public void updateStatusAfterClass2JobDeparture() {
         this.numberOfClass2Jobs--;
         this.numberOfClass2DepartedJobs++;
-    }
-
-    @Override
-    public void scheduleFollowingEventAfterClass1JobArrival() {
-        this.system.scheduleCloudEvent(Class1JobDeparture.class, this.getNextClass1JobDepartureTime());
-    }
-
-    @Override
-    public void scheduleFollowingEventAfterClass2JobArrival() {
-        this.system.scheduleCloudEvent(Class2JobDeparture.class, this.getNextClass2JobDepartureTime());
     }
 
     @Override

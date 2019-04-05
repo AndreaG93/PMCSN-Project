@@ -1,16 +1,16 @@
 package nexteventsimulation.computationalmodel.model.system.event.type;
 
-import nexteventsimulation.computationalmodel.model.system.event.Event;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 
-public class Class2JobArrival extends Event {
+public class Class2JobArrival extends SystemEvent {
 
     @Override
     public void perform() {
-        this.component.updateStatusAfterClass2JobArrival();
+        this.systemComponent.updateStatusAfterClass2JobArrival();
     }
 
     @Override
     public void scheduleFollowingEvent() {
-        this.component.scheduleFollowingEventAfterClass2JobArrival();
+        this.systemComponent.scheduleFollowingEventAfterClass2JobArrival();
     }
 }

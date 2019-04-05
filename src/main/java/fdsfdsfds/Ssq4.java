@@ -3,7 +3,7 @@ package fdsfdsfds;/* -----------------------------------------------------------
  * node using Exponentially distributed interarrival times and Erlang 
  * distributed service times (i.e., a M/E/1 queue).  The service node is 
  * assumed to be initially idle, no arrivals are permitted after the 
- * terminal time STOP, and the node is then purged by processing any 
+ * terminal startTime STOP, and the node is then purged by processing any
  * remaining jobs in the service node.
  *
  * Name            : Ssq4.java  (Single Server Queue, version 4)
@@ -19,26 +19,26 @@ import java.lang.Math;
 import java.text.*;
 
 public class Ssq4{
-    final double START = 0.0;               /*initial time                   */
-    final double STOP = 20000.0;            /*terminal (close the door) time */
+    final double START = 0.0;               /*initial startTime                   */
+    final double STOP = 20000.0;            /*terminal (close the door) startTime */
     final double INFINITY = (100.0 * STOP); /*must be much larger than STOP  */
     Rngs rngs;
     Rvgs rvgs;
     double arrival = START;
 
     private class T{
-	double arrival;                /* next arrival time                   */
-	double completion;             /* next completion time                */
-	double current;                /* current time                        */
-	double next;                   /* next (most imminent) event time     */
-	double last;                   /* last arrival time                   */
+	double arrival;                /* next arrival startTime                   */
+	double completion;             /* next completion startTime                */
+	double current;                /* current startTime                        */
+	double next;                   /* next (most imminent) event startTime     */
+	double last;                   /* last arrival startTime                   */
 
 	public T(){}
     }
     private class Area {
-	double node;                   /* time integrated number in the node  */
-	double queue;                  /* time integrated number in the queue */
-	double service;                /* time integrated number in service   */
+	double node;                   /* startTime integrated number in the node  */
+	double queue;                  /* startTime integrated number in the queue */
+	double service;                /* startTime integrated number in service   */
    
 	public Area(){
 	    node = queue = service = 0.0;
@@ -65,7 +65,7 @@ public class Ssq4{
 
     public double getArrival()
 	/* ---------------------------------------------
-	 * generate the next arrival time, with rate 1/2
+	 * generate the next arrival startTime, with rate 1/2
 	 * ---------------------------------------------
 	 */ 
     {
@@ -79,7 +79,7 @@ public class Ssq4{
 
     public double getService()
 	/* --------------------------------------------
-	 * generate the next service time with rate 2/3
+	 * generate the next service startTime with rate 2/3
 	 * --------------------------------------------
 	 */ 
     {
@@ -107,7 +107,7 @@ public class Ssq4{
   
 	t.completion = INFINITY;     /* the first event can't be a completion */
 	while ((t.arrival < STOP) || (number > 0)) {
-	    t.next          = min(t.arrival, t.completion); /*next event time */
+	    t.next          = min(t.arrival, t.completion); /*next event startTime */
 	    if (number > 0)  {                              /*update integrals*/
 		area.node    += (t.next - t.current) * number;
 		area.queue   += (t.next - t.current) * (number - 1);
@@ -139,13 +139,13 @@ public class Ssq4{
 	DecimalFormat f = new DecimalFormat("0.0000000000000000");
   
 	System.out.println("\nfor " + index + " jobs");
-	System.out.println("   average interarrival time =   " + 
+	System.out.println("   average interarrival startTime =   " +
 			f.format(t.last / index));
 	System.out.println("   average wait ............ =   " + 
 			f.format(area.node / index));
 	System.out.println("   average delay ........... =   " + 
 			f.format(area.queue / index));
-	System.out.println("   average service time .... =   " + 
+	System.out.println("   average service startTime .... =   " +
 			f.format(area.service / index));
 	System.out.println("   average # in the node ... =   " + 
 			f.format(area.node / t.current));
