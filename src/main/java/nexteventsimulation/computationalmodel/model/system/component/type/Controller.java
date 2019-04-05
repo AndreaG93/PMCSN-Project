@@ -4,8 +4,6 @@ import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobArrival;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobArrival;
 
 public abstract class Controller extends SystemComponent {
 

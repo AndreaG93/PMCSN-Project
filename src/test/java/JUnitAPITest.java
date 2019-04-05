@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Properties;
@@ -14,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class JUnitAPITest {
 
 
-    @Test
     public void testOnConfigFiles() {
 
         Properties prop = new Properties();
@@ -38,8 +38,6 @@ public class JUnitAPITest {
 
 
 
-
-    @Test
     public void test() {
         PriorityQueue<Double> ff = new PriorityQueue<Double>();
 
@@ -57,13 +55,7 @@ public class JUnitAPITest {
     public void test2() {
 
 
-/*
-        PriorityQueue<Double> ff = new PriorityQueue<Double>(new Comparator<Double>() {
-            public int compare(Double o1, Double o2) {
-                return (int) (o2.doubleValue() - o1.doubleValue());
-            }
-        });
-
+        PriorityQueue<Double> ff = new PriorityQueue<Double>(20, Collections.reverseOrder());
 
         ff.add(new Double(5.9));
         ff.add(new Double(4.0));
@@ -73,11 +65,11 @@ public class JUnitAPITest {
         assertEquals(5.9, ff.poll());
         assertEquals(4.0, ff.poll());
 
-*/
+
     }
 
 
-    @Test
+
     public void test3() {
 
 

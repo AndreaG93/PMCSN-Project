@@ -47,11 +47,15 @@ public abstract class SystemComponent {
 
     public abstract void scheduleInitialEvent();
 
+    public abstract void scheduleFollowingEventAfterClass1JobArrival();
+
+    public abstract void scheduleFollowingEventAfterClass2JobArrival();
+
     protected double getNextClass1JobInterArrivalTime() {
         return RandomNumberGenerator.getInstance().getExponential(0, this.class1AverageArrivalRate);
     }
 
-    private double getNextClass1JobServiceTime() {
+    protected double getNextClass1JobServiceTime() {
         return RandomNumberGenerator.getInstance().getExponential(1, this.class1AverageServiceRate);
     }
 
@@ -59,20 +63,8 @@ public abstract class SystemComponent {
         return RandomNumberGenerator.getInstance().getExponential(2, this.class2AverageArrivalRate);
     }
 
-    private double getNextClass2JobServiceTime() {
+    protected double getNextClass2JobServiceTime() {
         return RandomNumberGenerator.getInstance().getExponential(3, this.class2AverageServiceRate);
-    }
-
-    public void scheduleFollowingEventAfterClass1JobArrival() {
-
-        SystemEvent event = SystemEventFactory.buildClass1JobDeparture();
-        this.system.scheduleEventOnCloud(event, this.getNextClass1JobServiceTime());
-    }
-
-    public void scheduleFollowingEventAfterClass2JobArrival() {
-
-        SystemEvent event = SystemEventFactory.buildClass2JobDeparture();
-        this.system.scheduleEventOnCloud(event, this.getNextClass2JobServiceTime());
     }
 
     public void updateStatistics() {
@@ -96,10 +88,10 @@ public abstract class SystemComponent {
 
 
 
+
     private boolean isEmpty() {
         return (numberOfClass1Jobs + numberOfClass2Jobs) == 0;
     }
-
 
 
     public Map<String, Double> getStatistics() {
@@ -114,10 +106,6 @@ public abstract class SystemComponent {
         return null;
 
     }
-
-
-
-
 
 
     public int getNumberOfClass1Jobs() {

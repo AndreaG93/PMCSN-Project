@@ -1,4 +1,4 @@
-import fdsfdsfds.Rvgs;
+
 import nexteventsimulation.utility.API.Rvms;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class WriteOnFile {
         String fileContent = "Hello Learner !! Welcome to howtodoinjava.com.";
         try {
 
-            RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+            RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.getInstance();
 
             int totalSamples = 0;
             for (int n = 0; totalSamples < 10000; n++) {

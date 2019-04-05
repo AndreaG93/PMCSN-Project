@@ -1,8 +1,8 @@
 package nexteventsimulation.computationalmodel.model.system.component.type;
 
 import nexteventsimulation.computationalmodel.model.system.System;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobDeparture;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
+import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 
 public class Cloudlet extends SystemComponent {
@@ -42,6 +42,19 @@ public class Cloudlet extends SystemComponent {
 
     @Override
     public void updateStatistics() {
+    }
 
+    @Override
+    public void scheduleFollowingEventAfterClass1JobArrival() {
+
+        SystemEvent event = SystemEventFactory.buildClass1JobDeparture();
+        this.system.scheduleEventOnCloudlet(event, this.getNextClass1JobServiceTime());
+    }
+
+    @Override
+    public void scheduleFollowingEventAfterClass2JobArrival() {
+
+        SystemEvent event = SystemEventFactory.buildClass2JobDeparture();
+        this.system.scheduleEventOnCloudlet(event, this.getNextClass2JobServiceTime());
     }
 }

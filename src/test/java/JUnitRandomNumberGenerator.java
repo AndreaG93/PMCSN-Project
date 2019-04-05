@@ -18,7 +18,7 @@ public class JUnitRandomNumberGenerator {
         final double CLOUD_AVERAGE_SERVICE_RATE_CLASS_1 = 0.25;
         final double CLOUD_AVERAGE_SERVICE_RATE_CLASS_2 = 0.22;
 
-        RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+        RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.getInstance();
 
         double classOneArrivalTime_1 = randomNumberGenerator.getExponential(0, AVERAGE_ARRIVAL_RATE_CLASS_1 );  // 1.3000967376415709
         double classOneArrivalTime_2 = randomNumberGenerator.getExponential(0, AVERAGE_ARRIVAL_RATE_CLASS_1 );

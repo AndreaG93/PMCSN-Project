@@ -1,7 +1,6 @@
 package nexteventsimulation.computationalmodel.model.system;
 
 import nexteventsimulation.computationalmodel.ComputationalModel;
-import nexteventsimulation.computationalmodel.model.system.component.type.Controller;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloud;
@@ -9,8 +8,6 @@ import nexteventsimulation.computationalmodel.model.system.component.type.Cloudl
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
-
-import java.util.Iterator;
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -95,22 +92,16 @@ public abstract class System extends ComputationalModel {
             this.eventList.add(event);
     }
 
-    public void removeFarthermostCloudletClass2JobDeparture(){
+    public void removeFarthermostCloudletClass2JobDeparture() {
 
-        SystemEvent[] systemEvents = (SystemEvent[]) this.eventList.toArray();
+        SimulationEvent targetEvent = null;
 
-        for (int i = systemEvents.length - 1; i > 0; i--){
-
-            if (systemEvents[i] instanceof Class2JobDeparture){
-
-                if (systemEvents[i].getSystemComponent() instanceof Cloudlet){
-                    this.eventList.remove(systemEvents[i]);
-                    return;
-                }
-            }
+        for (SimulationEvent event : this.eventList) {
+            if (event instanceof Class2JobDeparture && ((SystemEvent) event).getSystemComponent() instanceof Cloudlet)
+                targetEvent = event;
         }
 
-
-
+        if (targetEvent != null)
+            this.eventList.remove(targetEvent);
     }
 }
