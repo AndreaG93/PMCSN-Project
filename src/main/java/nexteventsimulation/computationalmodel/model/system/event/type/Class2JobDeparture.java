@@ -7,6 +7,7 @@ public class Class2JobDeparture extends SystemEvent {
     @Override
     public void perform() {
         this.systemComponent.updateStatusAfterClass2JobDeparture();
+        this.systemComponent.logChanges();
     }
 
     @Override

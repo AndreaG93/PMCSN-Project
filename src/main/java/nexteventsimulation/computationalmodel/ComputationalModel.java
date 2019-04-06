@@ -3,14 +3,18 @@ package nexteventsimulation.computationalmodel;
 import nexteventsimulation.NextEventSimulation;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
-
+import nexteventsimulation.utility.SimulationEventList;
+import nexteventsimulation.utility.SimulationLogFactory;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class ComputationalModel implements NextEventSimulation {
 
-    protected PriorityQueue<SimulationEvent> eventList;
+    private static final Logger LOGGER = SimulationLogFactory.getLogger();
+
+    protected SimulationEventList<SimulationEvent> simulationEventList = new SimulationEventList<SimulationEvent>();
 
     protected abstract void initializeSystemStateVariables();
 
@@ -27,18 +31,18 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
         initializeSimulation();
 
-        while (!isSimulationFinalStateReached()) {
+        while (!this.simulationEventList.isEmpty()) {
 
-            SimulationEvent actualEvent = this.eventList.poll();
+            SimulationEvent actualEvent = this.simulationEventList.poll();
 
             if (actualEvent != null) {
-
+                LOGGER.log(Level.INFO, "[ACTUAL EVENT]: {0}", actualEvent);
                 SimulationClock.getInstance().setCurrentEventTime(actualEvent.getStartTime());
 
                 actualEvent.perform();
                 actualEvent.scheduleFollowingEvent();
 
-                SimulationEvent nextEvent = this.eventList.peek();
+                SimulationEvent nextEvent = this.simulationEventList.peek();
 
                 if (nextEvent != null)
                     SimulationClock.getInstance().setNextEventTime(nextEvent.getStartTime());
@@ -54,19 +58,13 @@ public abstract class ComputationalModel implements NextEventSimulation {
         scheduleInitialEvent();
     }
 
-    private boolean isSimulationFinalStateReached() {
-        return this.eventList.isEmpty();
-    }
-
     private void printSimulationResults() {
 
         Map<String, Double> results = getSimulationResults();
 
-        Iterator<Map.Entry<String, Double>> it = results.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Double> pair = it.next();
-            System.out.println(pair.getKey());
-            System.out.println(pair.getValue());
+        for (Map.Entry<String, Double> pair : results.entrySet()){
+            java.lang.System.out.println(pair.getKey());
+            java.lang.System.out.println(pair.getValue());
         }
     }
 }

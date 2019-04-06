@@ -25,12 +25,5 @@ public class Testdd {
 
             System.out.println(String.format("%s %s", key, value));
         }
-
-
-        RowColumnPagePrinter ddddd = new RowColumnPagePrinter(3,1, "Dadas");
-        ddddd.print(ff);
-
     }
-
-
 }

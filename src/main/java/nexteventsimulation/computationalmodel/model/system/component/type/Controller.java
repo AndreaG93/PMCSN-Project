@@ -38,7 +38,7 @@ public abstract class Controller extends SystemComponent {
     public void scheduleInitialEvent() {
 
         SystemEvent firstEventClass1 = SystemEventFactory.buildClass1JobArrival();
-        SystemEvent firstEventClass2 = SystemEventFactory.buildClass1JobArrival();
+        SystemEvent firstEventClass2 = SystemEventFactory.buildClass2JobArrival();
 
         this.system.scheduleEventOnController(firstEventClass1, this.getNextClass1JobInterArrivalTime());
         this.system.scheduleEventOnController(firstEventClass2, this.getNextClass2JobInterArrivalTime());

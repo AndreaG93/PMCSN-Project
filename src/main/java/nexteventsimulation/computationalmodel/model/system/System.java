@@ -8,10 +8,16 @@ import nexteventsimulation.computationalmodel.model.system.component.type.Cloudl
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
+import nexteventsimulation.utility.SimulationLogFactory;
+
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public abstract class System extends ComputationalModel {
+
+    private static final Logger LOGGER = SimulationLogFactory.getLogger();
 
     private final double simulationStartTime = 0.0;
     private final double simulationStopTime = 20000.0;
@@ -22,8 +28,6 @@ public abstract class System extends ComputationalModel {
     SystemComponent controller;
 
     public System() {
-        this.eventList = new PriorityQueue<SimulationEvent>();
-
         this.cloud = new Cloud(this);
         this.cloudlet = new Cloudlet(this);
     }
@@ -52,7 +56,13 @@ public abstract class System extends ComputationalModel {
 
     @Override
     protected Map<String, Double> getSimulationResults() {
-        return null;
+
+        Map<String, Double> output1 = this.cloudlet.getStatistics();
+        Map<String, Double> output2 = this.cloud.getStatistics();
+
+        output1.putAll(output2);
+
+        return output1;
     }
 
     public int getThreshold() {
@@ -64,15 +74,15 @@ public abstract class System extends ComputationalModel {
     }
 
     public int getNumberOfClass2JobOnCloudlet() {
-        return this.cloudlet.getNumberOfClass1Jobs();
+        return this.cloudlet.getNumberOfClass2Jobs();
     }
 
     public void scheduleEventOnCloud(SystemEvent event, double waitTime) {
 
-        event.setSystemComponent(this.cloudlet);
+        event.setSystemComponent(this.cloud);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        this.eventList.add(event);
+        this.simulationEventList.schedule(event);
     }
 
     public void scheduleEventOnCloudlet(SystemEvent event, double waitTime) {
@@ -80,28 +90,35 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.cloudlet);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        this.eventList.add(event);
+        this.simulationEventList.schedule(event);
     }
 
     public void scheduleEventOnController(SystemEvent event, double waitTime) {
 
-        event.setSystemComponent(this.cloudlet);
+        event.setSystemComponent(this.controller);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
         if (event.getStartTime() < this.simulationStopTime)
-            this.eventList.add(event);
+            this.simulationEventList.schedule(event);
     }
 
     public void removeFarthermostCloudletClass2JobDeparture() {
 
         SimulationEvent targetEvent = null;
 
-        for (SimulationEvent event : this.eventList) {
+        for (SimulationEvent event : this.simulationEventList) {
             if (event instanceof Class2JobDeparture && ((SystemEvent) event).getSystemComponent() instanceof Cloudlet)
-                targetEvent = event;
+                if (targetEvent == null)
+                    targetEvent = event;
+                else if (targetEvent.getStartTime() < event.getStartTime())
+                    targetEvent = event;
         }
 
         if (targetEvent != null)
-            this.eventList.remove(targetEvent);
+            this.simulationEventList.remove(targetEvent);
+
+        LOGGER.log(Level.INFO, "[INTERRUPTED JOB EVENT]: {0}", targetEvent);
+
+        this.cloudlet.decreaseNumberOfClass2Jobs();
     }
 }

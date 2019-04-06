@@ -42,10 +42,6 @@ public class Cloud extends SystemComponent {
     }
 
     @Override
-    public void updateStatistics(){
-    }
-
-    @Override
     public void scheduleFollowingEventAfterClass1JobArrival() {
 
         SystemEvent event = SystemEventFactory.buildClass1JobDeparture();

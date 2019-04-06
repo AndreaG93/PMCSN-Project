@@ -10,8 +10,8 @@ public class Cloudlet extends SystemComponent {
     public Cloudlet(System system) {
         super(system);
 
-        this.class1AverageServiceRate = 0.25;
-        this.class2AverageServiceRate = 0.22;
+        this.class1AverageServiceRate = 0.45;
+        this.class2AverageServiceRate = 0.27;
     }
 
     @Override
@@ -38,10 +38,6 @@ public class Cloudlet extends SystemComponent {
 
     @Override
     public void scheduleInitialEvent() {
-    }
-
-    @Override
-    public void updateStatistics() {
     }
 
     @Override

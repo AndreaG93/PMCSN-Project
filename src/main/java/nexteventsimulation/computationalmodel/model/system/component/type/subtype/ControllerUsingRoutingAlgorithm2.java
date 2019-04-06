@@ -23,19 +23,19 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
 
             if (n1 == this.system.getThreshold())
                 this.system.scheduleEventOnCloud(event, 0);
-            else if (n1 + n2 < this.system.getThreshold() && n2 > 0) {
+            else if (n1 + n2 < this.system.getThreshold())
+                if (n2 > 0) {
 
-                this.system.scheduleEventOnCloudlet(event, 0);
+                    this.system.removeFarthermostCloudletClass2JobDeparture();
 
-                this.system.removeFarthermostCloudletClass2JobDeparture();
+                    this.system.scheduleEventOnCloudlet(event, 0);
 
-                SystemEvent interruptedEvent = SystemEventFactory.buildClass2JobArrival();
-                double setupTime = RandomNumberGenerator.getInstance().getExponential(5, 0.8);
+                    double setupTime = RandomNumberGenerator.getInstance().getExponential(5, 0.8);
 
-                this.system.scheduleEventOnCloud(interruptedEvent, setupTime);
+                    this.system.scheduleEventOnCloud(SystemEventFactory.buildClass2JobArrival(), setupTime);
 
-            } else
-                this.system.scheduleEventOnCloudlet(event, 0);
+                } else
+                    this.system.scheduleEventOnCloudlet(event, 0);
 
         } else {
 

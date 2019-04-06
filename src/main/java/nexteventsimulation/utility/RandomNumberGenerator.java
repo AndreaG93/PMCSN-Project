@@ -14,10 +14,10 @@ public class RandomNumberGenerator {
         this.rvgs.rngs.plantSeeds(12345);
     }
 
-    public double getExponential(int stream, double rate) {
+    public double getExponential(int stream, double mean) {
 
         this.rvgs.rngs.selectStream(stream);
-        return this.rvgs.exponential(rate);
+        return this.rvgs.exponential(mean);
     }
 
     public static RandomNumberGenerator getInstance() {

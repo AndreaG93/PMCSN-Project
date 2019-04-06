@@ -9,7 +9,7 @@ public class EntryPoint {
         NextEventSimulation simulation1 = SystemFactory.buildSystemUsingRoutingAlgorithm1();
         NextEventSimulation simulation2 = SystemFactory.buildSystemUsingRoutingAlgorithm2();
 
-        simulation1.perform();
+        //simulation1.perform();
         simulation2.perform();
     }
 }

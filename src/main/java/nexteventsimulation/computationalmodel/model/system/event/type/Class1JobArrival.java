@@ -6,7 +6,8 @@ public class Class1JobArrival extends SystemEvent {
 
     @Override
     public void perform() {
-       this.systemComponent.updateStatusAfterClass1JobArrival();
+        this.systemComponent.updateStatusAfterClass1JobArrival();
+        this.systemComponent.logChanges();
     }
 
     @Override
