@@ -160,7 +160,8 @@ public class System_MATLAB_MarkovChainResolverScriptGenerator {
             this.buildEquations();
             this.writingLastPartMATLABScript();
             this.calculate_ALG_1_SendJobToCloudProbability();
-
+            this.calculate_ALG_1_AverageNumberOfJobCloudlet(1);
+            this.calculate_ALG_1_AverageNumberOfJobCloudlet(2);
 
             this.MATLABScriptFile.close();
 
@@ -170,14 +171,31 @@ public class System_MATLAB_MarkovChainResolverScriptGenerator {
 
     }
 
+    private void calculate_ALG_1_AverageNumberOfJobCloudlet(int classNumber) throws IOException {
+
+        this.MATLABScriptFile.write("\n");
+
+        if (classNumber == 1)
+            this.MATLABScriptFile.write("ALG_1_AverageNumberOfClass1JobCloudlet = 0");
+        else
+            this.MATLABScriptFile.write("ALG_1_AverageNumberOfClass2JobCloudlet = 0");
+
+        for (int n1 = 0; n1 <= N; n1++)
+            for (int n2 = 0; n2 <= N; n2++)
+                if (pi(n1, n2) != null)
+                    this.MATLABScriptFile.write(String.format(" + %d*solution.%s", (classNumber == 1) ? n1 : n2, pi(n1, n2)));
+
+        this.MATLABScriptFile.write("\n");
+    }
+
     private void calculate_ALG_1_SendJobToCloudProbability() throws IOException {
 
         this.MATLABScriptFile.write("ALG_1_SendJobToCloudProbability = 0");
 
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
-                if (i + j == N){
-                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(i,j)));
+                if (i + j == N) {
+                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(i, j)));
                 }
 
         this.MATLABScriptFile.write("\n");
