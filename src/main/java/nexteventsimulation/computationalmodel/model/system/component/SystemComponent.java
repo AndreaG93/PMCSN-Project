@@ -107,6 +107,13 @@ public abstract class SystemComponent {
         output.put(String.format("[%s] E[N_2]", this.getClass().getSimpleName()), averageNumberOfClass2Job);
         output.put(String.format("[%s] E[S_1]", this.getClass().getSimpleName()), averageClass1JobServiceTime);
         output.put(String.format("[%s] E[S_2]", this.getClass().getSimpleName()), averageClass2JobServiceTime);
+        output.put(String.format("[%s] E[T_1]", this.getClass().getSimpleName()), this.areaNumberOfClass1Jobs / this.numberOfClass1DepartedJobs);
+        output.put(String.format("[%s] E[T_2]", this.getClass().getSimpleName()), this.areaNumberOfClass2Jobs / this.numberOfClass2DepartedJobs);
+
+
+        output.put(String.format("[%s] E[X_1]", this.getClass().getSimpleName()), this.areaServiceTimeClass1Jobs /  SimulationClock.getInstance().getCurrentEventTime());
+        output.put(String.format("[%s] E[X_2]", this.getClass().getSimpleName()), this.areaServiceTimeClass2Jobs /  SimulationClock.getInstance().getCurrentEventTime());
+
 
         return output;
     }
