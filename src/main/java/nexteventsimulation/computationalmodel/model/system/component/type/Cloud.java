@@ -32,4 +32,14 @@ public class Cloud extends SystemComponent {
         SystemEvent event = SystemEventFactory.buildClass2JobDeparture();
         this.system.scheduleEventOnCloud(event, this.getNextClass2JobServiceTime());
     }
+
+    @Override
+    public void scheduleFollowingEventAfterClass1JobDeparture() {
+        this.system.scheduleEventOnGlobalNetwork(SystemEventFactory.buildClass1JobDeparture());
+    }
+
+    @Override
+    public void scheduleFollowingEventAfterClass2JobDeparture() {
+        this.system.scheduleEventOnGlobalNetwork(SystemEventFactory.buildClass2JobDeparture());
+    }
 }

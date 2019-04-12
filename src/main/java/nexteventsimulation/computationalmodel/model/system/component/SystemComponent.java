@@ -1,18 +1,14 @@
 package nexteventsimulation.computationalmodel.model.system.component;
 
 import nexteventsimulation.computationalmodel.model.system.System;
+import nexteventsimulation.computationalmodel.model.system.component.type.GlobalNetwork;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
-import nexteventsimulation.utility.SimulationLogFactory;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 public abstract class SystemComponent {
-
-    private static final Logger LOGGER = SimulationLogFactory.getLogger();
 
     protected double class1AverageArrivalRate;
     protected double class2AverageArrivalRate;
@@ -134,19 +130,13 @@ public abstract class SystemComponent {
         this.numberOfClass2Jobs--;
     }
 
-    public void logChanges(){
-
-        String message = String.format("[ACTUAL CHANGES]: %s, [N_1]: %s, [N_2]: %s",
-                this.getClass().getSimpleName(),
-                String.valueOf(this.numberOfClass1Jobs),
-                String.valueOf(this.numberOfClass2Jobs));
-
-        LOGGER.log(Level.INFO, message);
-    }
-
     public abstract void scheduleInitialEvent();
 
     public abstract void scheduleFollowingEventAfterClass1JobArrival();
 
     public abstract void scheduleFollowingEventAfterClass2JobArrival();
+
+    public abstract void scheduleFollowingEventAfterClass1JobDeparture();
+
+    public abstract void scheduleFollowingEventAfterClass2JobDeparture();
 }

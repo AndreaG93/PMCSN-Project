@@ -1,14 +1,15 @@
 package nexteventsimulation.computationalmodel.model.system;
 
 import nexteventsimulation.computationalmodel.ComputationalModel;
+import nexteventsimulation.computationalmodel.model.system.component.type.GlobalNetwork;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloud;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloudlet;
+import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobDeparture;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
-import nexteventsimulation.utility.SimulationLogFactory;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -17,25 +18,26 @@ import java.util.logging.Logger;
 
 public abstract class System extends ComputationalModel {
 
-    private static final Logger LOGGER = SimulationLogFactory.getLogger();
-
     private final double simulationStartTime = 0.0;
     private final double simulationStopTime = 20000.0;
     private final int threshold = 20;
 
     private SystemComponent cloud;
     private SystemComponent cloudlet;
+    private SystemComponent globalNetwork;
     SystemComponent controller;
 
     public System() {
         this.cloud = new Cloud(this);
         this.cloudlet = new Cloudlet(this);
+        this.globalNetwork = new GlobalNetwork(this);
     }
 
     @Override
     protected void initializeSystemStateVariables() {
         this.cloud.initializeSystemStateVariables();
         this.cloudlet.initializeSystemStateVariables();
+        this.globalNetwork.initializeSystemStateVariables();
     }
 
     @Override
@@ -45,24 +47,27 @@ public abstract class System extends ComputationalModel {
 
     @Override
     protected void scheduleInitialEvent() {
-        this.controller.scheduleInitialEvent();
+        this.globalNetwork.scheduleInitialEvent();
     }
 
     @Override
     protected void updateStatistics() {
         this.cloud.updateStatistics();
         this.cloudlet.updateStatistics();
+        this.globalNetwork.updateStatistics();
     }
 
     @Override
     protected Map<String, Double> getSimulationResults() {
 
+        Map<String, Double> output0 = this.globalNetwork.getStatistics();
         Map<String, Double> output1 = this.cloudlet.getStatistics();
         Map<String, Double> output2 = this.cloud.getStatistics();
 
-        output1.putAll(output2);
+        output0.putAll(output1);
+        output0.putAll(output2);
 
-        return output1;
+        return output0;
     }
 
     public int getThreshold() {
@@ -98,6 +103,25 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.controller);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
+        this.simulationEventList.schedule(event);
+    }
+
+    public void scheduleEventOnGlobalNetwork(SystemEvent event) {
+
+        event.setSystemComponent(this.globalNetwork);
+        event.setStartTime(SimulationClock.getInstance().getCurrentEventTime());
+
+        this.simulationEventList.schedule(event);
+    }
+
+    public void scheduleEventOnGlobalNetwork(SystemEvent event, double waitTime) {
+
+        event.setSystemComponent(this.globalNetwork);
+        event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
+
+        //if (event instanceof Class1JobDeparture || event instanceof Class2JobDeparture)
+          //  this.simulationEventList.schedule(event);
+
         if (event.getStartTime() < this.simulationStopTime)
             this.simulationEventList.schedule(event);
     }
@@ -116,8 +140,6 @@ public abstract class System extends ComputationalModel {
 
         if (targetEvent != null)
             this.simulationEventList.remove(targetEvent);
-
-        LOGGER.log(Level.INFO, "[INTERRUPTED JOB EVENT]: {0}", targetEvent);
 
         this.cloudlet.decreaseNumberOfClass2Jobs();
     }

@@ -4,16 +4,11 @@ import nexteventsimulation.NextEventSimulation;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import nexteventsimulation.utility.SimulationEventList;
-import nexteventsimulation.utility.SimulationLogFactory;
-
-import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class ComputationalModel implements NextEventSimulation {
-
-    private static final Logger LOGGER = SimulationLogFactory.getLogger();
 
     protected SimulationEventList<SimulationEvent> simulationEventList = new SimulationEventList<SimulationEvent>();
 
@@ -38,7 +33,6 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
             if (actualEvent != null) {
 
-                LOGGER.log(Level.INFO, "[ACTUAL EVENT]: {0}", actualEvent);
                 SimulationClock.getInstance().setCurrentEventTime(actualEvent.getStartTime());
 
                 actualEvent.perform();
