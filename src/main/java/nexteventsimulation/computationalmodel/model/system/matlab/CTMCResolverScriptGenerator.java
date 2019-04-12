@@ -56,7 +56,7 @@ public abstract class CTMCResolverScriptGenerator {
         for (int i = 0; i <= this.numberOfMATLABVariables; i++) {
             this.MATLABScriptFile.write(String.format("x%d", i));
             if (i == this.numberOfMATLABVariables)
-                this.MATLABScriptFile.write(")\n");
+                this.MATLABScriptFile.write(");\n");
             else
                 this.MATLABScriptFile.write(",");
         }
@@ -119,7 +119,7 @@ public abstract class CTMCResolverScriptGenerator {
             this.MATLABScriptFile.write(String.format("x%d", i));
 
             if (i == this.numberOfMATLABVariables)
-                this.MATLABScriptFile.write(" == 1\n");
+                this.MATLABScriptFile.write(" == 1;\n");
             else
                 this.MATLABScriptFile.write(" + ");
         }

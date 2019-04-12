@@ -15,6 +15,14 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
             this.writeAverageNumberOfJobCloudletComputationCommandsOnMATLABScript(1);
             this.writeAverageNumberOfJobCloudletComputationCommandsOnMATLABScript(2);
 
+            writeOnMATLABScript_Class1JobSendToCloudletProbability();
+            writeOnMATLABScript_Class1JobSendToCloudProbability();
+
+            writeOnMATLABScript_Class2JobInterruptionProbability();
+
+            writeOnMATLABScript_Class2JobSendToCloudletProbability();
+            writeOnMATLABScript_Class2JobSendToCloudProbability();
+
             this.MATLABScriptFile.close();
 
         } catch (IOException e) {
@@ -23,7 +31,7 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
     }
 
     @Override
-    protected void MATLABVariablesInit()  {
+    protected void MATLABVariablesInit() {
 
         for (int n1 = 0; n1 <= S; n1++) {
 
@@ -62,7 +70,7 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
         // ********************************************************************************************** //
 
         for (int i = 1; i <= S - 1; i++) {
-            eq = String.format("(lambda1 + lambda2 + %d*mu2)*%s == lambda2*%s + mu1*%s + mu2*(%d+1)*%s",
+            eq = String.format("(lambda1 + lambda2 + mu2*%d)*%s == lambda2*%s + mu1*%s + mu2*(%d+1)*%s",
                     i, pi(0, i), pi(0, i - 1), pi(1, i), i, pi(0, i + 1));
             this.writeEquationOnMATLABScript(eq);
         }
@@ -72,10 +80,9 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
         if (S < N)
             eq = String.format("(S*mu1+lambda1)*%s == lambda1*%s + lambda1*%s + mu1*(S+1)*%s",
                     pi(S, 0), pi(S - 1, 0), pi(S - 1, 1), pi(S + 1, 0));
-        else {
-            eq = String.format("(S*mu1+lambda1)*%s == lambda1*%s + lambda1*%s",
+        else
+            eq = String.format("(S*mu1)*%s == lambda1*%s + lambda1*%s",
                     pi(S, 0), pi(S - 1, 0), pi(S - 1, 1));
-        }
         this.writeEquationOnMATLABScript(eq);
 
         // ********************************************************************************************** //
@@ -88,8 +95,8 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
         for (int i = 1; i <= S - 1; i++)
             for (int j = 1; j <= S - 1; j++)
                 if (i + j == S) {
-                    eq = String.format("(mu1*%d + mu2*%d + lambda1)*%s == lambda1*%s + lambda2*%s",
-                            i, j, pi(i, j), pi(i - 1, j), pi(i, j - 1));
+                    eq = String.format("(mu1*%d + mu2*%d + lambda1)*%s == lambda1*%s + lambda1*%s + lambda2*%s",
+                            i, j, pi(i, j), pi(i - 1, j + 1), pi(i - 1, j), pi(i, j - 1));
                     this.writeEquationOnMATLABScript(eq);
                 }
 
@@ -118,5 +125,53 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
                     pi(N, 0), pi(N - 1, 0));
             this.writeEquationOnMATLABScript(eq);
         }
+    }
+
+
+    private void writeOnMATLABScript_Class1JobSendToCloudProbability() throws IOException {
+        this.MATLABScriptFile.write(String.format("Class1JobSendToCloudProbability = solution.%s;\n", pi(N, 0)));
+    }
+
+    private void writeOnMATLABScript_Class1JobSendToCloudletProbability() throws IOException {
+        this.MATLABScriptFile.write(String.format("Class1JobSendToCloudletProbability = 1 - solution.%s;\n", pi(N, 0)));
+    }
+
+    private void writeOnMATLABScript_Class2JobSendToCloudProbability() throws IOException {
+
+        this.MATLABScriptFile.write("Class2JobSendToCloudProbability = 0");
+
+        for (int n1 = 0; n1 <= N; n1++)
+            for (int n2 = 0; n2 <= N; n2++)
+                if (n1 + n2 >= S && pi(n1, n2) != null) {
+                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
+                }
+
+        this.MATLABScriptFile.write(";\n");
+    }
+
+    private void writeOnMATLABScript_Class2JobSendToCloudletProbability() throws IOException {
+
+        this.MATLABScriptFile.write("Class2JobSendToCloudletProbability = 1 - (0");
+
+        for (int n1 = 0; n1 <= N; n1++)
+            for (int n2 = 0; n2 <= S; n2++)
+                if (n1 + n2 >= S && pi(n1, n2) != null) {
+                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
+                }
+
+        this.MATLABScriptFile.write(");\n");
+    }
+
+    private void writeOnMATLABScript_Class2JobInterruptionProbability() throws IOException {
+
+        this.MATLABScriptFile.write("Class2JobInterruptionProbability = 0 ");
+
+        for (int n1 = 0; n1 <= N; n1++)
+            for (int n2 = 1; n2 <= S; n2++)
+                if (pi(n1, n2) != null) {
+                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
+                }
+
+        this.MATLABScriptFile.write(";\n");
     }
 }
