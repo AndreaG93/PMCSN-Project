@@ -19,10 +19,10 @@ public abstract class SystemComponent {
     protected double class1AverageServiceRate;
     protected double class2AverageServiceRate;
 
-    protected int numberOfClass1Jobs;
-    protected int numberOfClass2Jobs;
-    protected int numberOfClass1DepartedJobs;
-    protected int numberOfClass2DepartedJobs;
+    private int numberOfClass1Jobs;
+    private int numberOfClass2Jobs;
+    private int numberOfClass1DepartedJobs;
+    private int numberOfClass2DepartedJobs;
 
     private double areaNumberOfClass1Jobs = 0;
     private double areaNumberOfClass2Jobs = 0;
@@ -42,19 +42,23 @@ public abstract class SystemComponent {
         this.numberOfClass2DepartedJobs = 0;
     }
 
-    public abstract void updateStatusAfterClass1JobArrival();
+    public void updateStatusAfterClass1JobArrival() {
+        this.numberOfClass1Jobs++;
+    }
 
-    public abstract void updateStatusAfterClass1JobDeparture();
+    public void updateStatusAfterClass1JobDeparture() {
+        this.numberOfClass1Jobs--;
+        this.numberOfClass1DepartedJobs++;
+    }
 
-    public abstract void updateStatusAfterClass2JobArrival();
+    public void updateStatusAfterClass2JobArrival() {
+        this.numberOfClass2Jobs++;
+    }
 
-    public abstract void updateStatusAfterClass2JobDeparture();
-
-    public abstract void scheduleInitialEvent();
-
-    public abstract void scheduleFollowingEventAfterClass1JobArrival();
-
-    public abstract void scheduleFollowingEventAfterClass2JobArrival();
+    public void updateStatusAfterClass2JobDeparture() {
+        this.numberOfClass2Jobs--;
+        this.numberOfClass2DepartedJobs++;
+    }
 
     protected double getNextClass1JobInterArrivalTime() {
         return RandomNumberGenerator.getInstance().getExponential(0, Math.pow(this.class1AverageArrivalRate,-1));
@@ -139,4 +143,10 @@ public abstract class SystemComponent {
 
         LOGGER.log(Level.INFO, message);
     }
+
+    public abstract void scheduleInitialEvent();
+
+    public abstract void scheduleFollowingEventAfterClass1JobArrival();
+
+    public abstract void scheduleFollowingEventAfterClass2JobArrival();
 }

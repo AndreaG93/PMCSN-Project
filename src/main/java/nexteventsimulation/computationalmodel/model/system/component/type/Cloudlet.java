@@ -15,28 +15,6 @@ public class Cloudlet extends SystemComponent {
     }
 
     @Override
-    public void updateStatusAfterClass1JobArrival() {
-        this.numberOfClass1Jobs++;
-    }
-
-    @Override
-    public void updateStatusAfterClass1JobDeparture() {
-        this.numberOfClass1Jobs--;
-        this.numberOfClass1DepartedJobs++;
-    }
-
-    @Override
-    public void updateStatusAfterClass2JobArrival() {
-        this.numberOfClass2Jobs++;
-    }
-
-    @Override
-    public void updateStatusAfterClass2JobDeparture() {
-        this.numberOfClass2Jobs--;
-        this.numberOfClass2DepartedJobs++;
-    }
-
-    @Override
     public void scheduleInitialEvent() {
     }
 

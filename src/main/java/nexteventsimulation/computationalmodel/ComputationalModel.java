@@ -5,6 +5,7 @@ import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import nexteventsimulation.utility.SimulationEventList;
 import nexteventsimulation.utility.SimulationLogFactory;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -36,6 +37,7 @@ public abstract class ComputationalModel implements NextEventSimulation {
             SimulationEvent actualEvent = this.simulationEventList.poll();
 
             if (actualEvent != null) {
+
                 LOGGER.log(Level.INFO, "[ACTUAL EVENT]: {0}", actualEvent);
                 SimulationClock.getInstance().setCurrentEventTime(actualEvent.getStartTime());
 
@@ -62,7 +64,7 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
         Map<String, Double> results = getSimulationResults();
 
-        for (Map.Entry<String, Double> pair : results.entrySet()){
+        for (Map.Entry<String, Double> pair : results.entrySet()) {
             java.lang.System.out.println(pair.getKey());
             java.lang.System.out.println(pair.getValue());
         }
