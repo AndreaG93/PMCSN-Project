@@ -1,8 +1,7 @@
-
+/*
 import nexteventsimulation.utility.API.Rvms;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
-import statistics.SampleStatistics;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -43,11 +42,11 @@ public class WriteOnFile {
     }
 
 
-    public void ExtractMeanFromSampleStatisticsList(List<SampleStatistics> list) {
+    public void ExtractMeanFromSampleStatisticsList(List<Statistic> list) {
         try {
             FileWriter outputFile = new FileWriter("D:\\File\\expreriment\\output");
 
-            for (SampleStatistics obj : list) {
+            for (Statistic obj : list) {
                 outputFile.write(obj.getMean() + "\n");
             }
 
@@ -60,7 +59,7 @@ public class WriteOnFile {
 
     public void ProduceAvg() {
 
-        Vector<SampleStatistics> sampleStatisticsVector = new Vector<SampleStatistics>();
+        Vector<Statistic> sampleStatisticsVector = new Vector<Statistic>();
 
         File directory = new File("D:\\File\\expreriment");
         File[] fileList = directory.listFiles(new FilenameFilter() {
@@ -72,7 +71,7 @@ public class WriteOnFile {
 
         for (File file : fileList) {
 
-            SampleStatistics obj = new SampleStatistics();
+            Statistic obj = new Statistic();
             try {
                 obj.calculateStatisticsFromFile(file.getAbsolutePath());
             } catch (IOException e) {
@@ -91,7 +90,7 @@ public class WriteOnFile {
         double alpha = 1 - confidenceLevel;
         double sampleSize = 9;
 
-        SampleStatistics obj = new SampleStatistics();
+        Statistic obj = new Statistic();
         try {
             obj.calculateStatisticsFromFile("D:\\File\\expreriment\\file0");
             obj.Print();
@@ -114,3 +113,4 @@ public class WriteOnFile {
         System.out.println(String.format("Interval %.2f +- %.2f", obj.getMean(), distanceFromMean));
     }
 }
+*/

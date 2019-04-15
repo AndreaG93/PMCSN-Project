@@ -1,9 +1,9 @@
 package nexteventsimulation.computationalmodel.model.system.component;
 
 import nexteventsimulation.computationalmodel.model.system.System;
-import nexteventsimulation.computationalmodel.model.system.component.type.GlobalNetwork;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
+import statistics.BatchMeansManagerRegister;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,23 +57,24 @@ public abstract class SystemComponent {
     }
 
     protected double getNextClass1JobInterArrivalTime() {
-        return RandomNumberGenerator.getInstance().getExponential(0, Math.pow(this.class1AverageArrivalRate,-1));
+        return RandomNumberGenerator.getInstance().getExponential(0, Math.pow(this.class1AverageArrivalRate, -1));
     }
 
     protected double getNextClass1JobServiceTime() {
-        return RandomNumberGenerator.getInstance().getExponential(1, Math.pow(this.class1AverageServiceRate,-1));
+        return RandomNumberGenerator.getInstance().getExponential(1, Math.pow(this.class1AverageServiceRate, -1));
     }
 
     protected double getNextClass2JobInterArrivalTime() {
-        return RandomNumberGenerator.getInstance().getExponential(2, Math.pow(this.class2AverageArrivalRate,-1));
+        return RandomNumberGenerator.getInstance().getExponential(2, Math.pow(this.class2AverageArrivalRate, -1));
     }
 
     protected double getNextClass2JobServiceTime() {
-        return RandomNumberGenerator.getInstance().getExponential(3, Math.pow(this.class2AverageServiceRate,-1));
+        return RandomNumberGenerator.getInstance().getExponential(3, Math.pow(this.class2AverageServiceRate, -1));
     }
 
     public void updateStatistics() {
 
+        BatchMeansManagerRegister batchMeansManagerRegister = BatchMeansManagerRegister.getInstance();
         SimulationClock simulationClock = SimulationClock.getInstance();
 
         if (numberOfClass1Jobs != 0) {
@@ -89,6 +90,10 @@ public abstract class SystemComponent {
 
             areaServiceTimeClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime());
         }
+
+        batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class1Population").add(this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
+        batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class2Population").add(this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
+
     }
 
     public Map<String, Double> getStatistics() {
@@ -111,8 +116,8 @@ public abstract class SystemComponent {
         output.put(String.format("[%s] E[T_2]", this.getClass().getSimpleName()), this.areaNumberOfClass2Jobs / this.numberOfClass2DepartedJobs);
 
 
-        output.put(String.format("[%s] E[X_1]", this.getClass().getSimpleName()), this.areaServiceTimeClass1Jobs /  SimulationClock.getInstance().getCurrentEventTime());
-        output.put(String.format("[%s] E[X_2]", this.getClass().getSimpleName()), this.areaServiceTimeClass2Jobs /  SimulationClock.getInstance().getCurrentEventTime());
+        output.put(String.format("[%s] E[X_1]", this.getClass().getSimpleName()), this.areaServiceTimeClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
+        output.put(String.format("[%s] E[X_2]", this.getClass().getSimpleName()), this.areaServiceTimeClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
 
 
         return output;
@@ -126,7 +131,7 @@ public abstract class SystemComponent {
         return this.numberOfClass2Jobs;
     }
 
-    public void decreaseNumberOfClass2Jobs(){
+    public void decreaseNumberOfClass2Jobs() {
         this.numberOfClass2Jobs--;
     }
 

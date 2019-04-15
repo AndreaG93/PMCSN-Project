@@ -1,4 +1,4 @@
-package nexteventsimulation.computationalmodel.model.system.matlab;
+package nexteventsimulation.computationalmodel.model.system.matlab.CTMC;
 
 public class CTMCResolverEntryPoint {
 

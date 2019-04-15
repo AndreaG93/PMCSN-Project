@@ -4,9 +4,8 @@ import nexteventsimulation.NextEventSimulation;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import nexteventsimulation.utility.SimulationEventList;
+import statistics.BatchMeansManagerRegister;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class ComputationalModel implements NextEventSimulation {
 
@@ -45,7 +44,14 @@ public abstract class ComputationalModel implements NextEventSimulation {
             }
             updateStatistics();
         }
+
+        produceStatisticResultsThroughBatchMeansMethod();
+
         printSimulationResults();
+    }
+
+    private void produceStatisticResultsThroughBatchMeansMethod(){
+        BatchMeansManagerRegister.getInstance().computeStatisticsAndWriteData();
     }
 
     private void initializeSimulation() {

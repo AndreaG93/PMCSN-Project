@@ -1,4 +1,4 @@
-package nexteventsimulation.computationalmodel.model.system.matlab;
+package nexteventsimulation.computationalmodel.model.system.matlab.CTMC;
 
 import java.io.FileWriter;
 import java.io.IOException;

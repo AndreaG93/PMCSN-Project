@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public abstract class System extends ComputationalModel {
 
     private final double simulationStartTime = 0.0;
-    private final double simulationStopTime = 20000.0;
+    private final double simulationStopTime = 30000.0;
     private final int threshold = 20;
 
     private SystemComponent cloud;
@@ -118,9 +118,6 @@ public abstract class System extends ComputationalModel {
 
         event.setSystemComponent(this.globalNetwork);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
-
-        //if (event instanceof Class1JobDeparture || event instanceof Class2JobDeparture)
-          //  this.simulationEventList.schedule(event);
 
         if (event.getStartTime() < this.simulationStopTime)
             this.simulationEventList.schedule(event);
