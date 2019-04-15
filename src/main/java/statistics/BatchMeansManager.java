@@ -11,12 +11,14 @@ import java.util.Map;
 public class BatchMeansManager {
 
     private Map<Integer, Batch> batchMap;
-    private final int batchSize = 12000;
+    private final int batchSize = 10000;
     private int numberOfBatch;
 
     private String metricName;
     private int currentBatchIndex;
     private int currentProcessedElementIndex;
+
+    private int N;
 
     private double sampleSize;
     private double mean;
@@ -36,6 +38,8 @@ public class BatchMeansManager {
     }
 
     public void add(double data) {
+
+        N++;
 
         if (currentProcessedElementIndex == batchSize) {
 
@@ -67,6 +71,8 @@ public class BatchMeansManager {
         for (Map.Entry<Integer, Batch> pair : batchMap.entrySet()) {
 
             currentBatch = pair.getValue();
+            if (currentBatch.getNumberOfSample() != batchSize + 1)
+                break;
 
             if (index == 0) {
 
@@ -98,9 +104,10 @@ public class BatchMeansManager {
         double alpha = 1 - confidenceLevel;
 
         Rvms rvms = new Rvms();
-        double criticalValue = rvms.idfStudent(9, 1 - alpha / 2);
+        long K = N / batchSize;
+        double criticalValue = rvms.idfStudent(K, 1 - alpha / 2);
 
-        distanceFromMean = (criticalValue * this.standardDeviation / Math.sqrt(currentBatchIndex - 1));
+        distanceFromMean = (criticalValue * this.standardDeviation / Math.sqrt(K - 1));
     }
 
 
@@ -114,7 +121,7 @@ public class BatchMeansManager {
         }
 
         try {
-            output = new FileWriter(String.format("./data/%s", metricName));
+            output = new FileWriter(String.format("./data/%s%d", metricName,  BatchMeansManagerRegister.getInstance().getCurrentReplicationIndex()));
 
 
             output.write(String.format("Metric Name %s\n\n", metricName));
@@ -124,7 +131,7 @@ public class BatchMeansManager {
             output.write(String.format("Standard Deviation %f\n", standardDeviation));
             output.write(String.format("Minimum %f\n", min));
             output.write(String.format("Maximum %f\n", max));
-            output.write(String.format("Interval %.2f +- %.2f", mean, distanceFromMean));
+            output.write(String.format("Interval %f +- %f (%f,%f)", mean, distanceFromMean, mean-distanceFromMean, mean+distanceFromMean));
 
             output.flush();
             output.close();

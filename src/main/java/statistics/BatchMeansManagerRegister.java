@@ -7,16 +7,21 @@ public class BatchMeansManagerRegister {
 
     private static BatchMeansManagerRegister instance = null;
 
+    private int replicationIndex;
+
     private Map<String, BatchMeansManager> batchMeansManagerMap;
 
     private BatchMeansManagerRegister(){
-        batchMeansManagerMap = new HashMap<String, BatchMeansManager>();
     }
 
     public static BatchMeansManagerRegister getInstance() {
         if (instance == null)
             instance = new BatchMeansManagerRegister();
         return instance;
+    }
+
+    public int getCurrentReplicationIndex() {
+        return replicationIndex;
     }
 
     public BatchMeansManager getBatchMeansManager(String statisticMetricName){
@@ -39,5 +44,11 @@ public class BatchMeansManagerRegister {
             pair.getValue().computeConfidenceInterval();
             pair.getValue().writeStatisticsData();
         }
+    }
+
+    public void setReplicationIndex(int currentReplicationIndex) {
+        this.replicationIndex = currentReplicationIndex;
+
+        batchMeansManagerMap = new HashMap<String, BatchMeansManager>();
     }
 }

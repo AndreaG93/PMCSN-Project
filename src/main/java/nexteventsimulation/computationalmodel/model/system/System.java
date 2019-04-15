@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public abstract class System extends ComputationalModel {
 
     private final double simulationStartTime = 0.0;
-    private final double simulationStopTime = 30000.0;
+    private final double simulationStopTime = 20000.0;
     private final int threshold = 20;
 
     private SystemComponent cloud;
@@ -43,6 +43,7 @@ public abstract class System extends ComputationalModel {
     @Override
     protected void initializeSimulationClock() {
         SimulationClock.getInstance().setCurrentEventTime(simulationStartTime);
+        SimulationClock.getInstance().setNextEventTime(simulationStartTime);
     }
 
     @Override

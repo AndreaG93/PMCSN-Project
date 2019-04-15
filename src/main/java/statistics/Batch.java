@@ -7,8 +7,11 @@ public class Batch {
     private double sum = 0.0;
     private double min;
     private double max;
+    private int s;
 
     public void add(double data) {
+
+        s++;
 
         if (index == 0) {
 

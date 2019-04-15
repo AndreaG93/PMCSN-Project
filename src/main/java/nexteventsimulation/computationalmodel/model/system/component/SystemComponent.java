@@ -4,6 +4,7 @@ import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
 import statistics.BatchMeansManagerRegister;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +83,8 @@ public abstract class SystemComponent {
             areaNumberOfClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
 
             areaServiceTimeClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime());
+
+            batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class1Population").add(this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
         }
 
         if (numberOfClass2Jobs != 0) {
@@ -89,11 +92,9 @@ public abstract class SystemComponent {
             areaNumberOfClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass2Jobs;
 
             areaServiceTimeClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime());
+
+            batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class2Population").add(this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
         }
-
-        batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class1Population").add(this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
-        batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class2Population").add(this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
-
     }
 
     public Map<String, Double> getStatistics() {
