@@ -1,5 +1,7 @@
 package statistics;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,13 @@ public class BatchMeansManagerRegister {
     private Map<String, BatchMeansManager> batchMeansManagerMap;
 
     private BatchMeansManagerRegister(){
+
+        File outputDir = new File("./output");
+        FileWriter output;
+
+        if (!outputDir.exists()) {
+            outputDir.mkdir();
+        }
     }
 
     public static BatchMeansManagerRegister getInstance() {

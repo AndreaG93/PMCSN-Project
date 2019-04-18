@@ -11,7 +11,7 @@ public class RandomNumberGenerator {
 
     private RandomNumberGenerator() {
         this.rvgs = new Rvgs(new Rngs());
-        this.rvgs.rngs.plantSeeds(123456789);
+        this.rvgs.rngs.plantSeeds(12345);
     }
 
     public double getExponential(int stream, double mean) {
@@ -27,6 +27,9 @@ public class RandomNumberGenerator {
     }
 
     public void setReplicationIndex(int replicationIndex) {
+
         this.replicationIndex = replicationIndex;
+        this.rvgs = new Rvgs(new Rngs());
+        this.rvgs.rngs.plantSeeds(12345*(replicationIndex+1));
     }
 }

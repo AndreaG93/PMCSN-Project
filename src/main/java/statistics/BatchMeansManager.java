@@ -3,22 +3,19 @@ package statistics;
 import nexteventsimulation.utility.API.Rvms;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.HashMap;
 
+import java.util.Locale;
 import java.util.Map;
 
 public class BatchMeansManager {
 
     private Map<Integer, Batch> batchMap;
-    private final int batchSize = 10000;
-    private int numberOfBatch;
+    private final double batchSize = 4096;
+    private double numberOfSamples;
 
     private String metricName;
     private int currentBatchIndex;
-    private int currentProcessedElementIndex;
-
-    private int N;
 
     private double sampleSize;
     private double mean;
@@ -27,34 +24,34 @@ public class BatchMeansManager {
     private double max;
     private double distanceFromMean;
 
-    public BatchMeansManager(String metricName) {
+    BatchMeansManager(String metricName) {
 
         this.metricName = metricName;
-        currentBatchIndex = 0;
-        currentProcessedElementIndex = 0;
+        this.currentBatchIndex = 0;
+        this.numberOfSamples = 0;
 
-        batchMap = new HashMap<Integer, Batch>();
-        batchMap.put(currentBatchIndex, new Batch());
+        this.batchMap = new HashMap<Integer, Batch>();
+        this.batchMap.put(currentBatchIndex, new Batch());
     }
 
     public void add(double data) {
 
-        N++;
+        Batch currentBatch = batchMap.get(currentBatchIndex);
 
-        if (currentProcessedElementIndex == batchSize) {
-
-            currentBatchIndex++;
-            currentProcessedElementIndex = 0;
-
-            batchMap.put(currentBatchIndex, new Batch());
+        if (currentBatch == null) {
+            currentBatch = new Batch();
+            batchMap.put(currentBatchIndex, currentBatch);
         }
 
-        Batch currentBatch = batchMap.get(currentBatchIndex);
-        currentBatch.add(data);
-        currentProcessedElementIndex++;
+        if (currentBatch.getBatchSize() != batchSize)
+            currentBatch.add(data);
+        else
+            currentBatchIndex++;
+
+        this.numberOfSamples++;
     }
 
-    public void computeStatistics() {
+    void computeStatistics() {
 
         Batch currentBatch;
         long index;
@@ -71,67 +68,55 @@ public class BatchMeansManager {
         for (Map.Entry<Integer, Batch> pair : batchMap.entrySet()) {
 
             currentBatch = pair.getValue();
-            if (currentBatch.getNumberOfSample() != batchSize + 1)
-                break;
+            if (currentBatch.getBatchSize() != batchSize)
+                continue;
 
-            if (index == 0) {
-
-                data = currentBatch.getMean();
-                index = 1;
-                mean = data;
-                min = data;
+            data = currentBatch.getMean();
+            index++;
+            diff = data - mean;
+            sum += diff * diff * (index - 1.0) / index;
+            mean += diff / index;
+            if (data > max)
                 max = data;
+            else if (data < min)
+                min = data;
 
-            } else {
-                data = currentBatch.getMean();
-                index++;
-                diff = data - mean;
-                sum += diff * diff * (index - 1.0) / index;
-                mean += diff / index;
-                if (data > max)
-                    max = data;
-                else if (data < min)
-                    min = data;
-            }
         }
         this.standardDeviation = Math.sqrt(sum / index);
         this.sampleSize = index;
     }
 
-    public void computeConfidenceInterval() {
+    void computeConfidenceInterval() {
 
         double confidenceLevel = 0.95;
         double alpha = 1 - confidenceLevel;
 
         Rvms rvms = new Rvms();
-        long K = N / batchSize;
-        double criticalValue = rvms.idfStudent(K, 1 - alpha / 2);
+        long K = (long) (this.numberOfSamples / batchSize);
+        double criticalValue = rvms.idfStudent(K - 1, 1 - 0.05 / 2);
 
-        distanceFromMean = (criticalValue * this.standardDeviation / Math.sqrt(K - 1));
+        distanceFromMean = ((criticalValue * this.standardDeviation) / Math.sqrt(K - 1));
     }
 
 
-    public void writeStatisticsData() {
+    void writeStatisticsData() {
 
-        File outputDir = new File("./data");
-        FileWriter output;
-
-        if (!outputDir.exists()) {
-            outputDir.mkdir();
-        }
+        String outputFileName = String.format("./output/%s", metricName);
+        int replicationIndex = BatchMeansManagerRegister.getInstance().getCurrentReplicationIndex();
 
         try {
-            output = new FileWriter(String.format("./data/%s%d", metricName,  BatchMeansManagerRegister.getInstance().getCurrentReplicationIndex()));
 
+            File file = new File(outputFileName);
+            FileWriter output;
 
-            output.write(String.format("Metric Name %s\n\n", metricName));
+            if (!file.exists()) {
+                output = new FileWriter(outputFileName);
+                output.write("grid on\nxlabel('Replication')\naxis([-1 10 0 20])\nhold on\n");
+            } else
+                output = new FileWriter(outputFileName, true);
 
-            output.write(String.format("Sample Size %f\n", sampleSize));
-            output.write(String.format("Mean %f\n", mean));
-            output.write(String.format("Standard Deviation %f\n", standardDeviation));
-            output.write(String.format("Minimum %f\n", min));
-            output.write(String.format("Maximum %f\n", max));
-            output.write(String.format("Interval %f +- %f (%f,%f)", mean, distanceFromMean, mean-distanceFromMean, mean+distanceFromMean));
+            output.write(String.format(Locale.US, "plot(%d,%f,'r*')\nhold on\n", replicationIndex, mean));
+            output.write(String.format(Locale.US, "plot([%d %d],[%f %f])\nhold on\n", replicationIndex, replicationIndex, mean - distanceFromMean, mean + distanceFromMean));
 
             output.flush();
             output.close();

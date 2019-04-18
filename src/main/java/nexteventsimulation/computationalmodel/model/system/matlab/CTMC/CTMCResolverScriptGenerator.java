@@ -26,7 +26,7 @@ public abstract class CTMCResolverScriptGenerator {
      * @param n2 - An @code{int} representing number of class 2 job in a CTMC state.
      * @return A @code{String} object.
      */
-    protected String pi(int n1, int n2) {
+    String pi(int n1, int n2) {
         return MATLABVariables.get(String.format("pi(%d,%d)", n1, n2));
     }
 
@@ -35,7 +35,7 @@ public abstract class CTMCResolverScriptGenerator {
      *
      * @param equation - A @code{String} object containing a MATLAB equation.
      */
-    protected void writeEquationOnMATLABScript(String equation) throws IOException {
+    void writeEquationOnMATLABScript(String equation) throws IOException {
 
         this.MATLABScriptFile.write(String.format("eq%d = %s;\n", this.equationNumber, equation));
         this.equationNumber++;
@@ -45,7 +45,7 @@ public abstract class CTMCResolverScriptGenerator {
      * This function, invoked after completion of equation building phase, is used to insert some MATLAB command
      * used for equation computation.
      */
-    protected void writeEquationComputationCommandsOnMATLABScript() throws IOException {
+    void writeEquationComputationCommandsOnMATLABScript() throws IOException {
 
         this.MATLABScriptFile.write("solution = solve(");
 

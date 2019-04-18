@@ -76,25 +76,34 @@ public abstract class SystemComponent {
     public void updateStatistics() {
 
         BatchMeansManagerRegister batchMeansManagerRegister = BatchMeansManagerRegister.getInstance();
+
         SimulationClock simulationClock = SimulationClock.getInstance();
 
-        if (numberOfClass1Jobs != 0) {
+        String currentComponent = this.getClass().getSimpleName();
+
+        //if (numberOfClass1Jobs != 0) {
 
             areaNumberOfClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
-
             areaServiceTimeClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime());
 
-            batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class1Population").add(this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
-        }
+            batchMeansManagerRegister.getBatchMeansManager(currentComponent + "Class1Population").add(this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
 
-        if (numberOfClass2Jobs != 0) {
+            if (this.numberOfClass1DepartedJobs != 0)
+                batchMeansManagerRegister.getBatchMeansManager(currentComponent + "Class1ServiceTime").add(this.areaNumberOfClass1Jobs / this.numberOfClass1DepartedJobs);
+       // }
+
+        //if (numberOfClass2Jobs != 0) {
 
             areaNumberOfClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass2Jobs;
-
             areaServiceTimeClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime());
 
-            batchMeansManagerRegister.getBatchMeansManager(this.getClass().getSimpleName() + "Class2Population").add(this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
-        }
+            batchMeansManagerRegister.getBatchMeansManager(currentComponent + "Class2Population").add(this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
+
+            if (this.numberOfClass2DepartedJobs != 0)
+                batchMeansManagerRegister.getBatchMeansManager(currentComponent + "Class2ServiceTime").add(this.areaNumberOfClass2Jobs / this.numberOfClass2DepartedJobs);
+        //}
+
+
     }
 
     public Map<String, Double> getStatistics() {

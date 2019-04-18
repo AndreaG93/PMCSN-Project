@@ -6,20 +6,17 @@ import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloud;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloudlet;
-import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobDeparture;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
-
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 
 public abstract class System extends ComputationalModel {
 
     private final double simulationStartTime = 0.0;
-    private final double simulationStopTime = 20000.0;
+    private final double simulationStopTime = 15000.0;
     private final int threshold = 20;
 
     private SystemComponent cloud;

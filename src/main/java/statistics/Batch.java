@@ -2,40 +2,24 @@ package statistics;
 
 public class Batch {
 
-    private int index = 0;
-    private double mean = 0;
-    private double sum = 0.0;
-    private double min;
-    private double max;
-    private int s;
+    private int index;
+    private double mean;
 
-    public void add(double data) {
+    Batch() {
+        this.index = 0;
+        this.mean = 0;
+    }
 
-        s++;
-
-        if (index == 0) {
-
-            index = 1;
-            mean = data;
-            min = data;
-            max = data;
-        }
-
+    void add(double data) {
         index++;
-        double diff = data - mean;
-        sum += diff * diff * (index - 1.0) / index;
-        mean += diff / index;
-        if (data > max)
-            max = data;
-        else if (data < min)
-            min = data;
+        mean += ((data - mean) / index);
     }
 
     public double getMean() {
         return mean;
     }
 
-    public double getNumberOfSample(){
+    double getBatchSize() {
         return index;
     }
 }
