@@ -11,13 +11,7 @@ import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import java.util.Map;
 
-
-
 public abstract class System extends ComputationalModel {
-
-    private final double simulationStartTime = 0.0;
-    private final double simulationStopTime = 15000.0;
-    private final int threshold = 20;
 
     private SystemComponent cloud;
     private SystemComponent cloudlet;
@@ -39,8 +33,8 @@ public abstract class System extends ComputationalModel {
 
     @Override
     protected void initializeSimulationClock() {
-        SimulationClock.getInstance().setCurrentEventTime(simulationStartTime);
-        SimulationClock.getInstance().setNextEventTime(simulationStartTime);
+        SimulationClock.getInstance().setCurrentEventTime(0.0);
+        SimulationClock.getInstance().setNextEventTime(0.0);
     }
 
     @Override
@@ -50,6 +44,7 @@ public abstract class System extends ComputationalModel {
 
     @Override
     protected void updateStatistics() {
+
         this.cloud.updateStatistics();
         this.cloudlet.updateStatistics();
         this.globalNetwork.updateStatistics();
@@ -69,7 +64,7 @@ public abstract class System extends ComputationalModel {
     }
 
     public int getThreshold() {
-        return threshold;
+        return 20;
     }
 
     public int getNumberOfClass1JobOnCloudlet() {
@@ -117,7 +112,7 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.globalNetwork);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        if (event.getStartTime() < this.simulationStopTime)
+        if (event.getStartTime() < 30000.0)
             this.simulationEventList.schedule(event);
     }
 

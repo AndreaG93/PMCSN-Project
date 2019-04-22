@@ -5,7 +5,6 @@ import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 
-
 public class Cloud extends SystemComponent {
 
     public Cloud(System system){

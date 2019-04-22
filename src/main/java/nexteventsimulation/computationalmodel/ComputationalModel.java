@@ -4,7 +4,9 @@ import nexteventsimulation.NextEventSimulation;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import nexteventsimulation.utility.SimulationEventList;
-import statistics.BatchMeansManagerRegister;
+import outputanalysis.batchmeans.BatchMeansRegister;
+import outputanalysis.ensemblestatistics.EnsembleStatisticsRegister;
+
 import java.util.Map;
 
 public abstract class ComputationalModel implements NextEventSimulation {
@@ -47,11 +49,11 @@ public abstract class ComputationalModel implements NextEventSimulation {
 
         produceStatisticResultsThroughBatchMeansMethod();
 
-        printSimulationResults();
+        manageCurrentSimulationResult();
     }
 
     private void produceStatisticResultsThroughBatchMeansMethod(){
-        BatchMeansManagerRegister.getInstance().computeStatisticsAndWriteData();
+        BatchMeansRegister.getInstance().computeStatisticsAndWriteData();
     }
 
     private void initializeSimulation() {
@@ -60,13 +62,11 @@ public abstract class ComputationalModel implements NextEventSimulation {
         scheduleInitialEvent();
     }
 
-    private void printSimulationResults() {
+    private void manageCurrentSimulationResult() {
 
-        Map<String, Double> results = getSimulationResults();
+        EnsembleStatisticsRegister ensembleStatisticsRegister = EnsembleStatisticsRegister.getInstance();
 
-        for (Map.Entry<String, Double> pair : results.entrySet()) {
-            java.lang.System.out.println(pair.getKey());
-            java.lang.System.out.println(pair.getValue());
-        }
+        for (Map.Entry<String, Double> pair : getSimulationResults().entrySet())
+            ensembleStatisticsRegister.addDataToEnsemble(pair.getKey(), pair.getValue());
     }
 }
