@@ -4,6 +4,8 @@ import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
 import outputanalysis.batchmeans.BatchMeansRegister;
+import outputanalysis.histograms.HistogramsRegister;
+import outputanalysis.scatterplots.ScatterPlotRegister;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,34 +90,45 @@ public abstract class SystemComponent {
     public void updateStatistics() {
 
         BatchMeansRegister batchMeansRegister = BatchMeansRegister.getInstance();
+        ScatterPlotRegister scatterPlotRegister = ScatterPlotRegister.getInstance();
+        HistogramsRegister histogramsRegister = HistogramsRegister.getInstance();
+
         SimulationClock simulationClock = SimulationClock.getInstance();
         String currentComponent = this.getClass().getSimpleName();
 
         batchMeansRegister.addDataToBatch(currentComponent + "Class1JobsNumber", this.numberOfClass1Jobs);
         batchMeansRegister.addDataToBatch(currentComponent + "Class2JobsNumber", this.numberOfClass2Jobs);
         batchMeansRegister.addDataToBatch(currentComponent + "JobsNumber", this.numberOfClass1Jobs + this.numberOfClass2Jobs);
-
-
         batchMeansRegister.addDataToBatch(currentComponent + "Throughput", (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs) / SimulationClock.getInstance().getCurrentEventTime());
-
-
 
         areaNumberOfClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
         areaServiceTimeClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
 
-        //if (this.numberOfClass1DepartedJobs != 0)
-        //    batchMeansRegister.getBatchMeans(currentComponent + "Class1ServiceTime").add(this.areaNumberOfClass1Jobs / this.numberOfClass1DepartedJobs);
-
-
         areaNumberOfClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass2Jobs;
         areaServiceTimeClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass2Jobs;
 
-        //if (this.numberOfClass2DepartedJobs != 0)
-        //    batchMeansRegister.addDataToBatch(currentComponent + "Class2ServiceTime",this.areaNumberOfClass2Jobs / this.numberOfClass2DepartedJobs);
-
-
         areaServiceTime += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * (numberOfClass1Jobs + numberOfClass2Jobs);
         areaNumberOfJobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * (numberOfClass1Jobs + numberOfClass2Jobs);
+
+        scatterPlotRegister.addData(currentComponent + "Class1JobsNumber", simulationClock.getCurrentEventTime(), this.areaNumberOfClass1Jobs / SimulationClock.getInstance().getCurrentEventTime());
+        scatterPlotRegister.addData(currentComponent + "Class2JobsNumber", simulationClock.getCurrentEventTime(), this.areaNumberOfClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
+        scatterPlotRegister.addData(currentComponent + "JobsNumber", simulationClock.getCurrentEventTime(), (this.areaNumberOfJobs) / SimulationClock.getInstance().getCurrentEventTime());
+
+        scatterPlotRegister.addData(currentComponent + "Class1JobsServiceTime", simulationClock.getCurrentEventTime(), this.areaServiceTimeClass1Jobs / this.numberOfClass1DepartedJobs);
+        scatterPlotRegister.addData(currentComponent + "Class2JobsServiceTime", simulationClock.getCurrentEventTime(), this.areaServiceTimeClass2Jobs / this.numberOfClass2DepartedJobs);
+        scatterPlotRegister.addData(currentComponent + "JobsServiceTime", simulationClock.getCurrentEventTime(), this.areaServiceTime / (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs));
+
+        scatterPlotRegister.addData(currentComponent + "Throughput", simulationClock.getCurrentEventTime(), (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs) / SimulationClock.getInstance().getCurrentEventTime());
+        scatterPlotRegister.addData(currentComponent + "Class1Throughput", simulationClock.getCurrentEventTime(), this.numberOfClass1DepartedJobs / SimulationClock.getInstance().getCurrentEventTime());
+        scatterPlotRegister.addData(currentComponent + "Class2Throughput", simulationClock.getCurrentEventTime(), this.numberOfClass2DepartedJobs / SimulationClock.getInstance().getCurrentEventTime());
+
+        // SPECIAL
+        scatterPlotRegister.addData(currentComponent + "WaitVersusNumber", (this.areaNumberOfJobs) / SimulationClock.getInstance().getCurrentEventTime(), this.areaServiceTime / (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs));
+
+        // Histograms
+        histogramsRegister.addData(currentComponent + "NumberOfJobs", this.numberOfClass1Jobs + this.numberOfClass2Jobs);
+        histogramsRegister.addData(currentComponent + "NumberOfClass1Jobs", this.numberOfClass1Jobs);
+        histogramsRegister.addData(currentComponent + "NumberOfClass2Jobs", this.numberOfClass2Jobs);
     }
 
     public Map<String, Double> getStatistics() {

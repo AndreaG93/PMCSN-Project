@@ -17,6 +17,13 @@ public class RandomNumberGenerator {
         return this.rvgs.exponential(mean);
     }
 
+    public double getUniformBetween(long a, long b) {
+
+        this.rvgs.rngs.selectStream(100);
+        return this.rvgs.equilikely(a,b);
+    }
+
+
     public static RandomNumberGenerator getInstance() {
 
         if (instance == null)

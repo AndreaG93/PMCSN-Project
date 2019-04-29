@@ -29,6 +29,7 @@ class EnsembleStatistics {
         try {
             writeEnsembleOutputStatistic();
             writeEnsembleOutputStatisticForMATLABGraphics();
+            writeEnsembleOutputStatisticLatexFormat();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,6 +50,23 @@ class EnsembleStatistics {
         output.flush();
         output.close();
     }
+
+    private void writeEnsembleOutputStatisticLatexFormat() throws IOException {
+
+        FileWriter output = new FileWriter(String.format("./output/ensembleStatisticsLatex_%s", this.name));
+
+        output.write(String.format(Locale.US, "Metric name: %s \n\n", this.name));
+
+        for (int replicationNumber = 0; replicationNumber < this.values.size(); replicationNumber++)
+            output.write(String.format(Locale.US, "Replication n. %d                   : %f \n", replicationNumber, this.values.get(replicationNumber)));
+
+        output.write(String.format(Locale.US, "\nEnsemble average point estimate    : %f \n", this.ensembleStatistics.getMean()));
+        output.write(String.format(Locale.US, "\nEnsemble average interval estimate : %f \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
+
+        output.flush();
+        output.close();
+    }
+
 
     private void writeEnsembleOutputStatisticForMATLABGraphics() throws IOException {
 
@@ -73,16 +91,17 @@ class EnsembleStatistics {
         // Add scatter plot...
 
         output.write("hold on\nylim([-0.01 0.01])\n");
-        output.write("scatter(x,y,'filled','DisplayName','Transient statistic values')\n");
-        output.write("%scatter(0,0,'o','k','DisplayName','Analytical values')\n");
+        output.write("scatter(x,y,'filled','DisplayName','Transient statistic value.')\n");
+        output.write("%xline(0,'DisplayName','Analytical value')\n");
 
 
-        output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval')\n",
+        output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval.')\n",
                 this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean));
 
-        output.write(String.format(Locale.US, "plot([%f %f],[0.0005 0.0005],'color','green','LineWidth', 1,'DisplayName', 'Effective width of sample: [x-2s,x+2s]')\n",
+        output.write(String.format(Locale.US, "plot([%f %f],[0.0005 0.0005],'color','green','LineWidth', 1,'DisplayName', 'Effective sample width: [x-2s,x+2s]')\n",
                 this.ensembleStatistics.getMean() - 2*this.ensembleStatistics.getStandardDeviation(), this.ensembleStatistics.getMean() + 2*this.ensembleStatistics.getStandardDeviation()));
 
+        output.write("set(gca,'YTickLabel',[])\n");
         output.write("hold off\nlegend\n");
 
         output.flush();

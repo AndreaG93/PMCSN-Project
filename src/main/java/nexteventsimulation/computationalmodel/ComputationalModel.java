@@ -6,6 +6,8 @@ import nexteventsimulation.utility.SimulationEvent;
 import nexteventsimulation.utility.SimulationEventList;
 import outputanalysis.batchmeans.BatchMeansRegister;
 import outputanalysis.ensemblestatistics.EnsembleStatisticsRegister;
+import outputanalysis.histograms.HistogramsRegister;
+import outputanalysis.scatterplots.ScatterPlotRegister;
 
 import java.util.Map;
 
@@ -47,14 +49,14 @@ public abstract class ComputationalModel implements NextEventSimulation {
             updateStatistics();
         }
 
-        produceStatisticResultsThroughBatchMeansMethod();
+        BatchMeansRegister.getInstance().computeStatisticsAndWriteData();
+        ScatterPlotRegister.getInstance().writingOutputData();
+        HistogramsRegister.getInstance().computeStatisticsAndWriteData();
 
         manageCurrentSimulationResult();
     }
 
-    private void produceStatisticResultsThroughBatchMeansMethod(){
-        BatchMeansRegister.getInstance().computeStatisticsAndWriteData();
-    }
+
 
     private void initializeSimulation() {
         initializeSystemStateVariables();

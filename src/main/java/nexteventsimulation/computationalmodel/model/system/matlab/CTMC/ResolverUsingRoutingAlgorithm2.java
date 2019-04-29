@@ -16,12 +16,14 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
             this.writeAverageNumberOfJobCloudletComputationCommandsOnMATLABScript(2);
 
             writeOnMATLABScript_Class1JobSendToCloudletProbability();
+
             writeOnMATLABScript_Class1JobSendToCloudProbability();
 
             writeOnMATLABScript_Class2JobInterruptionProbability();
 
-            writeOnMATLABScript_Class2JobSendToCloudletProbability();
             writeOnMATLABScript_Class2JobSendToCloudProbability();
+
+            writeOnMATLABScript_Class2JobSendToCloudletProbability();
 
             this.MATLABScriptFile.close();
 
@@ -141,34 +143,34 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
         this.MATLABScriptFile.write("Class2JobSendToCloudProbability = 0");
 
         for (int n1 = 0; n1 <= N; n1++)
-            for (int n2 = 0; n2 <= N; n2++)
-                if (n1 + n2 >= S && pi(n1, n2) != null) {
+            for (int n2 = 0; n2 <= N; n2++) {
+
+                if (n1 + n2 == S) {
                     this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
                 }
+
+                if (n2 == 0 && n1 >= S + 1) {
+                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
+                }
+
+            }
+
 
         this.MATLABScriptFile.write(";\n");
     }
 
     private void writeOnMATLABScript_Class2JobSendToCloudletProbability() throws IOException {
 
-        this.MATLABScriptFile.write("Class2JobSendToCloudletProbability = 1 - (0");
-
-        for (int n1 = 0; n1 <= N; n1++)
-            for (int n2 = 0; n2 <= S; n2++)
-                if (n1 + n2 >= S && pi(n1, n2) != null) {
-                    this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
-                }
-
-        this.MATLABScriptFile.write(");\n");
+        this.MATLABScriptFile.write("Class2JobSendToCloudletProbability = 1 - Class2JobSendToCloudProbability\n;");
     }
 
     private void writeOnMATLABScript_Class2JobInterruptionProbability() throws IOException {
 
         this.MATLABScriptFile.write("Class2JobInterruptionProbability = 0 ");
 
-        for (int n1 = 0; n1 <= N; n1++)
+        for (int n1 = 0; n1 <= S - 1; n1++)
             for (int n2 = 1; n2 <= S; n2++)
-                if (pi(n1, n2) != null) {
+                if (n1 + n2 == S) {
                     this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
                 }
 

@@ -7,6 +7,7 @@ import nexteventsimulation.computationalmodel.model.system.component.SystemCompo
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloud;
 import nexteventsimulation.computationalmodel.model.system.component.type.Cloudlet;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobDeparture;
+import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
 import java.util.Map;
@@ -45,9 +46,11 @@ public abstract class System extends ComputationalModel {
     @Override
     protected void updateStatistics() {
 
+        this.controller.updateStatistics();
         this.cloud.updateStatistics();
         this.cloudlet.updateStatistics();
         this.globalNetwork.updateStatistics();
+
     }
 
     @Override
@@ -56,9 +59,12 @@ public abstract class System extends ComputationalModel {
         Map<String, Double> output0 = this.globalNetwork.getStatistics();
         Map<String, Double> output1 = this.cloudlet.getStatistics();
         Map<String, Double> output2 = this.cloud.getStatistics();
+        Map<String, Double> output3 = this.controller.getStatistics();
 
         output0.putAll(output1);
         output0.putAll(output2);
+        output0.putAll(output3);
+
 
         return output0;
     }
@@ -112,25 +118,23 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.globalNetwork);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        if (event.getStartTime() < 30000.0)
+        if (event.getStartTime() < 10000.0)
             this.simulationEventList.schedule(event);
     }
 
     public void removeFarthermostCloudletClass2JobDeparture() {
 
-        SimulationEvent targetEvent = null;
+        RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.getInstance();
 
-        for (SimulationEvent event : this.simulationEventList) {
-            if (event instanceof Class2JobDeparture && ((SystemEvent) event).getSystemComponent() instanceof Cloudlet)
-                if (targetEvent == null)
-                    targetEvent = event;
-                else if (targetEvent.getStartTime() < event.getStartTime())
-                    targetEvent = event;
+        while (true) {
+            for (SimulationEvent event : this.simulationEventList)
+                if (event instanceof Class2JobDeparture && ((SystemEvent) event).getSystemComponent() instanceof Cloudlet)
+                    if (randomNumberGenerator.getUniformBetween(0, 100) <= 1) {
+
+                        this.simulationEventList.remove(event);
+                        this.cloudlet.decreaseNumberOfClass2Jobs();
+                        return;
+                    }
         }
-
-        if (targetEvent != null)
-            this.simulationEventList.remove(targetEvent);
-
-        this.cloudlet.decreaseNumberOfClass2Jobs();
     }
 }
