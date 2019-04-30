@@ -18,6 +18,8 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
         return instance;
     }
 
+
+
     @Override
     protected void loadDataIntoRegistry() {
 
@@ -25,21 +27,21 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
 
         // Cloudlet Time-Average Population
 
-        this.register.put("Cloudlet_Class1JobsNumber", 5.204009618);
-        this.register.put("Cloudlet_Class2JobsNumber", 13.55210838);
-        this.register.put("Cloudlet_JobsNumber", 18.75611799);
+        this.register.put("Cloudlet_Class1JobsNumber", 8.884108755);
+        this.register.put("Cloudlet_Class2JobsNumber", 9.608670684);
+        this.register.put("Cloudlet_JobsNumber", 18.492779440);
 
         // Cloud Time-Average Population
 
-        this.register.put("Cloud_Class1JobsNumber", 6.622806284);
-        this.register.put("Cloud_Class2JobsNumber", 11.759244113);
-        this.register.put("Cloud_JobsNumber", 18.382050397);
+        this.register.put("Cloud_Class1JobsNumber", 0.008604239);
+        this.register.put("Cloud_Class2JobsNumber", 16.644920866);
+        this.register.put("Cloud_JobsNumber", 16.653525106);
 
         // GlobalNetwork Time-Average Population
 
-        this.register.put("GlobalNetwork_Class1JobsNumber", 11.826815902);
-        this.register.put("GlobalNetwork_Class2JobsNumber", 25.311352493);
-        this.register.put("GlobalNetwork_JobsNumber", 37.138168396);
+        this.register.put("GlobalNetwork_Class1JobsNumber", 8.892712995);
+        this.register.put("GlobalNetwork_Class2JobsNumber", 26.253591551);
+        this.register.put("GlobalNetwork_JobsNumber", 35.146304546);
 
         // ***************************************************************** //
 
@@ -47,33 +49,33 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
 
         this.register.put("Cloudlet_Class1JobsServiceTime", 2.222222222);
         this.register.put("Cloudlet_Class2JobsServiceTime", 3.703770377);
-        this.register.put("Cloudlet_JobsServiceTime", 3.125564588);
+        this.register.put("Cloudlet_JobsServiceTime", 2.804406796);
 
         // Cloud Time-Average Service Time
 
         this.register.put("Cloud_Class1JobsServiceTime", 4.0);
         this.register.put("Cloud_Class2JobsServiceTime", 4.545454545);
-        this.register.put("Cloud_JobsServiceTime", 4.332594235);
+        this.register.put("Cloud_JobsServiceTime", 4.545134323);
 
         // GlobalNetwork Time-Average Service Time
 
-        this.register.put("GlobalNetwork_Class1JobsServiceTime", 2.958089587);
-        this.register.put("GlobalNetwork_Class2JobsServiceTime", 4.052125751);
-        this.register.put("GlobalNetwork_JobsServiceTime", 3.625184809);
+        this.register.put("GlobalNetwork_Class1JobsServiceTime", 2.223178248);
+        this.register.put("GlobalNetwork_Class2JobsServiceTime", 4.079733115);
+        this.register.put("GlobalNetwork_JobsServiceTime", 3.355223899);
 
         // ***************************************************************** //
 
         // Cloudlet Throughput
 
-        this.register.put("Cloudlet_Class1Throughput", 2.344298428);
-        this.register.put("Cloudlet_Class2Throughput", 3.662966295);
-        this.register.put("Cloudlet_Throughput", 6.007264723);
+        this.register.put("Cloudlet_Class1Throughput", 3.997848940);
+        this.register.put("Cloudlet_Class2Throughput", 2.588117409);
+        this.register.put("Cloudlet_Throughput", 6.585966349);
 
         // Cloud Throughput
 
-        this.register.put("Cloud_Class1Throughput", 1.655701571);
-        this.register.put("Cloud_Class2Throughput", 2.587033704);
-        this.register.put("Cloud_Throughput", 4.242735276);
+        this.register.put("Cloud_Class1Throughput", 0.002151059);
+        this.register.put("Cloud_Class2Throughput", 3.661882590);
+        this.register.put("Cloud_Throughput", 3.664033650);
 
         // GlobalNetwork Throughput
 
