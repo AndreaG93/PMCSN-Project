@@ -120,7 +120,7 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.globalNetwork);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        if (event.getStartTime() < 12000.0)
+        if (event.getStartTime() < 10000.0)
             this.simulationEventList.schedule(event);
     }
 

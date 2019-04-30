@@ -1,5 +1,6 @@
 package outputanalysis.batchmeans;
 
+import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
 import java.io.FileWriter;
@@ -32,20 +33,22 @@ public class BatchMeans {
 
     private void computeStatistics() {
 
-        this.batchSize = this.values.size() / 9;
+        int currentIndex = 0;
+        while (currentIndex < this.values.size()) {
 
-        if (this.name.equals("Cloudlet_Class1JobsNumber"))
-            this.batchSize = this.values.size() / 5;
-        if (this.name.equals("Cloud_Class2JobServiceTime"))
-            this.batchSize = this.values.size() / 5;
-        if (this.name.equals("Cloud_JobServiceTime"))
-            this.batchSize = this.values.size() / 5;
+            List<Double> batch = new Vector<Double>();
 
+            for (;currentIndex < this.values.size();){
 
+                batch.add(this.values.get(currentIndex));
+                currentIndex += 30;
 
-        // Batch splitting
-        for (int currentIndex = 0; currentIndex + this.batchSize <= this.values.size(); currentIndex += this.batchSize)
-            this.batches.add(new Statistics(this.values.subList(currentIndex, currentIndex + this.batchSize)));
+                if (batch.size() == 4096){
+                    this.batches.add(new Statistics(batch));
+                    break;
+                }
+            }
+        }
 
         // Batch means statistics computation
         List<Double> batchMeans = new Vector<Double>();

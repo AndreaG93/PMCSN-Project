@@ -13,6 +13,7 @@ public class RandomNumberGenerator {
 
     public double getExponential(int stream, double mean) {
 
+        //this.rvgs.rngs.selectStream(stream + SimulationRegistry.getInstance().getCurrentSimulationReplicationIndex());
         this.rvgs.rngs.selectStream(stream);
         return this.rvgs.exponential(mean);
     }
