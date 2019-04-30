@@ -1,5 +1,6 @@
 package outputanalysis.batchmeans;
 
+import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,7 +32,16 @@ public class BatchMeans {
 
     private void computeStatistics() {
 
-        this.batchSize = this.values.size() / 10;
+        this.batchSize = this.values.size() / 9;
+
+        if (this.name.equals("Cloudlet_Class1JobsNumber"))
+            this.batchSize = this.values.size() / 5;
+        if (this.name.equals("Cloud_Class2JobServiceTime"))
+            this.batchSize = this.values.size() / 5;
+        if (this.name.equals("Cloud_JobServiceTime"))
+            this.batchSize = this.values.size() / 5;
+
+
 
         // Batch splitting
         for (int currentIndex = 0; currentIndex + this.batchSize <= this.values.size(); currentIndex += this.batchSize)
@@ -50,6 +60,8 @@ public class BatchMeans {
 
         computeStatistics();
 
+        double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
+
         String outputFileName = String.format("./output/BM_%s.m", name);
 
         double distanceFromMean = this.batchMeansStatistic.getConfidenceIntervalDistanceFromMean(0.95);
@@ -57,9 +69,19 @@ public class BatchMeans {
         try {
             FileWriter output = new FileWriter(outputFileName, true);
 
-            output.write(String.format(Locale.US, "plot(%d,%f,'*','color','black')\nhold on\n", replicationIndex, this.batchMeansStatistic.getMean()));
-            output.write(String.format(Locale.US, "plot([%d %d],[%f %f],'color','black','LineWidth', 1)\nhold on\n",
+            if(SimulationRegistry.getInstance().isFirstSimulationReplications()) {
+                output.write("h=figure\n");
+                output.write(String.format(Locale.US,"xlim([-1 %d])\nhold on\n", SimulationRegistry.getInstance().getTotalSimulationReplications()+1));
+            }
+
+            output.write(String.format(Locale.US, "plot(%d,%f,'*','color','black','HandleVisibility','off')\nhold on\n", replicationIndex, this.batchMeansStatistic.getMean()));
+            output.write(String.format(Locale.US, "plot([%d %d],[%f %f],'color','black','LineWidth', 1,'HandleVisibility','off')\nhold on\n",
                     replicationIndex, replicationIndex, this.batchMeansStatistic.getMean() - distanceFromMean, this.batchMeansStatistic.getMean() + distanceFromMean));
+
+            if (SimulationRegistry.getInstance().AreSimulationReplicationsTerminate()) {
+                output.write(String.format(Locale.US, "yline(%f,'DisplayName','Analytical value')\nlegend\n", analyticalValue));
+                output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
+            }
 
             output.flush();
             output.close();
@@ -67,5 +89,9 @@ public class BatchMeans {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setBatchSize(int size) {
+        this.batchSize = size;
     }
 }

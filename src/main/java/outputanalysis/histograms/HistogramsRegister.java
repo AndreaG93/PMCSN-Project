@@ -4,6 +4,8 @@ package outputanalysis.histograms;
 
 
 
+import nexteventsimulation.utility.SimulationRegistry;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +13,6 @@ public class HistogramsRegister {
 
     private static HistogramsRegister instance = null;
     private Map<String, Histograms> register;
-    private int replicationIndex;
 
     private HistogramsRegister() {
         this.register = new HashMap<String, Histograms>();
@@ -39,13 +40,11 @@ public class HistogramsRegister {
     public void computeStatisticsAndWriteData(){
 
         for (Map.Entry<String, Histograms> pair : register.entrySet())
-            pair.getValue().writeMATLABScriptPlot(replicationIndex);
+            pair.getValue().writeMATLABScriptPlot(SimulationRegistry.getInstance().getCurrentSimulationReplicationIndex());
 
     }
 
-    public void setReplicationIndex(int replicationIndex) {
-        this.replicationIndex = replicationIndex;
+    public void initialize() {
         this.register = new HashMap<String, Histograms>();
     }
-
 }

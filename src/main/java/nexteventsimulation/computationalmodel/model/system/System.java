@@ -10,6 +10,7 @@ import nexteventsimulation.computationalmodel.model.system.event.type.Class2JobD
 import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationClock;
 import nexteventsimulation.utility.SimulationEvent;
+
 import java.util.Map;
 
 public abstract class System extends ComputationalModel {
@@ -63,8 +64,9 @@ public abstract class System extends ComputationalModel {
 
         output0.putAll(output1);
         output0.putAll(output2);
-        output0.putAll(output3);
 
+        if (!output3.isEmpty())
+            output0.putAll(output3);
 
         return output0;
     }
@@ -118,7 +120,7 @@ public abstract class System extends ComputationalModel {
         event.setSystemComponent(this.globalNetwork);
         event.setStartTime(SimulationClock.getInstance().getCurrentEventTime() + waitTime);
 
-        if (event.getStartTime() < 10000.0)
+        if (event.getStartTime() < 12000.0)
             this.simulationEventList.schedule(event);
     }
 

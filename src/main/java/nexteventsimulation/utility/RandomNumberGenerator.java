@@ -31,9 +31,9 @@ public class RandomNumberGenerator {
         return instance;
     }
 
-    public void initialize(int replicationIndex) {
+    public void initialize() {
 
         this.rvgs = new Rvgs(new Rngs());
-        this.rvgs.rngs.plantSeeds(12345 * (replicationIndex+1));
+        this.rvgs.rngs.plantSeeds(12345 * (SimulationRegistry.getInstance().getCurrentSimulationReplicationIndex()+1));
     }
 }

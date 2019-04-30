@@ -1,5 +1,7 @@
 package outputanalysis.scatterplots;
 
+import nexteventsimulation.utility.SimulationRegistry;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +9,6 @@ public class ScatterPlotRegister {
 
     private static ScatterPlotRegister instance = null;
     private Map<String, ScatterPlot> register;
-    private int replicationIndex;
 
     private ScatterPlotRegister() {
         this.register = new HashMap<String, ScatterPlot>();
@@ -34,11 +35,10 @@ public class ScatterPlotRegister {
     public void writingOutputData() {
 
         for (Map.Entry<String, ScatterPlot> pair : register.entrySet())
-            pair.getValue().writeMATLABScatterPlot(replicationIndex);
+            pair.getValue().writeMATLABScatterPlot(SimulationRegistry.getInstance().getCurrentSimulationReplicationIndex());
     }
 
-    public void setReplicationIndex(int replicationIndex) {
-        this.replicationIndex = replicationIndex;
+    public void initialize() {
         this.register = new HashMap<String, ScatterPlot>();
     }
 }

@@ -1,6 +1,8 @@
 package outputanalysis.ensemblestatistics;
 
+import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +31,6 @@ class EnsembleStatistics {
         try {
             writeEnsembleOutputStatistic();
             writeEnsembleOutputStatisticForMATLABGraphics();
-            writeEnsembleOutputStatisticLatexFormat();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,39 +52,26 @@ class EnsembleStatistics {
         output.close();
     }
 
-    private void writeEnsembleOutputStatisticLatexFormat() throws IOException {
-
-        FileWriter output = new FileWriter(String.format("./output/ensembleStatisticsLatex_%s", this.name));
-
-        output.write(String.format(Locale.US, "Metric name: %s \n\n", this.name));
-
-        for (int replicationNumber = 0; replicationNumber < this.values.size(); replicationNumber++)
-            output.write(String.format(Locale.US, "Replication n. %d                   : %f \n", replicationNumber, this.values.get(replicationNumber)));
-
-        output.write(String.format(Locale.US, "\nEnsemble average point estimate    : %f \n", this.ensembleStatistics.getMean()));
-        output.write(String.format(Locale.US, "\nEnsemble average interval estimate : %f \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
-
-        output.flush();
-        output.close();
-    }
-
-
     private void writeEnsembleOutputStatisticForMATLABGraphics() throws IOException {
 
+        double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
+
         FileWriter output = new FileWriter(String.format("./output/ensembleStatistics_%s.m", this.name));
-        
+
         double distanceFromMean = this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95);
+
+        output.write("h=figure\n");
 
         // X
         output.write("x = [ ");
-        for (double value : this.values){
+        for (double value : this.values) {
             output.write(String.format(Locale.US, " %f ", value));
         }
         output.write(" ];\n");
 
         // Y
         output.write("y = [ ");
-        for (int i = 0; i < this.values.size(); i++){
+        for (int i = 0; i < this.values.size(); i++) {
             output.write("0 ");
         }
         output.write(" ];\n");
@@ -92,17 +80,17 @@ class EnsembleStatistics {
 
         output.write("hold on\nylim([-0.01 0.01])\n");
         output.write("scatter(x,y,'filled','DisplayName','Transient statistic value.')\n");
-        output.write("%xline(0,'DisplayName','Analytical value')\n");
-
+        output.write(String.format(Locale.US, "xline(%f,'DisplayName','Analytical value')\n", analyticalValue));
 
         output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval.')\n",
                 this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean));
 
         output.write(String.format(Locale.US, "plot([%f %f],[0.0005 0.0005],'color','green','LineWidth', 1,'DisplayName', 'Effective sample width: [x-2s,x+2s]')\n",
-                this.ensembleStatistics.getMean() - 2*this.ensembleStatistics.getStandardDeviation(), this.ensembleStatistics.getMean() + 2*this.ensembleStatistics.getStandardDeviation()));
+                this.ensembleStatistics.getMean() - 2 * this.ensembleStatistics.getStandardDeviation(), this.ensembleStatistics.getMean() + 2 * this.ensembleStatistics.getStandardDeviation()));
 
         output.write("set(gca,'YTickLabel',[])\n");
         output.write("hold off\nlegend\n");
+        output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
 
         output.flush();
         output.close();

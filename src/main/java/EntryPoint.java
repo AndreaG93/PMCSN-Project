@@ -2,6 +2,7 @@ import nexteventsimulation.NextEventSimulation;
 
 import nexteventsimulation.computationalmodel.model.system.SystemFactory;
 import nexteventsimulation.utility.RandomNumberGenerator;
+import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.batchmeans.BatchMeansRegister;
 import outputanalysis.ensemblestatistics.EnsembleStatisticsRegister;
 import outputanalysis.histograms.HistogramsRegister;
@@ -18,13 +19,17 @@ public class EntryPoint {
             index.mkdir();
         }
 
-        for (int currentReplicationIndex = 0; currentReplicationIndex < 10; currentReplicationIndex++){
 
-            RandomNumberGenerator.getInstance().initialize(currentReplicationIndex);
+        SimulationRegistry.getInstance().setTotalSimulationReplications(9);
 
-            BatchMeansRegister.getInstance().setReplicationIndex(currentReplicationIndex);
-            ScatterPlotRegister.getInstance().setReplicationIndex(currentReplicationIndex);
-            HistogramsRegister.getInstance().setReplicationIndex(currentReplicationIndex);
+        for (int currentReplicationIndex = 0; currentReplicationIndex <= 9; currentReplicationIndex++){
+
+            SimulationRegistry.getInstance().setCurrentSimulationReplicationIndex(currentReplicationIndex);
+
+            RandomNumberGenerator.getInstance().initialize();
+            BatchMeansRegister.getInstance().initialize();
+            ScatterPlotRegister.getInstance().initialize();
+            HistogramsRegister.getInstance().initialize();
 
             NextEventSimulation simulation1 = SystemFactory.buildSystemUsingRoutingAlgorithm1();
             NextEventSimulation simulation2 = SystemFactory.buildSystemUsingRoutingAlgorithm2();

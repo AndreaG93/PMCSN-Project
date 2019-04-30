@@ -1,5 +1,6 @@
 package outputanalysis.histograms;
 
+import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
 import outputanalysis.scatterplots.ScatterPlotPoint;
 
@@ -31,6 +32,11 @@ public class Histograms {
 
     void writeMATLABScriptPlot(int replicationIndex) {
 
+        if (!SimulationRegistry.getInstance().isFirstSimulationReplications())
+            return;
+
+        double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
+
         int j;                                      /* histogram bin index */
         long count[] = new long[K];                 /* bin count           */
         double midpoint[] = new double[K];          /* bin midpoint        */
@@ -56,6 +62,8 @@ public class Histograms {
 
             FileWriter output = new FileWriter(String.format("./output/Histogram_%s_%d.m", this.name, replicationIndex));
 
+            output.write("h=figure\n");
+
             for (j = 0; j < K; j++)
                 output.write(String.format(Locale.US, "\nx%d = %f.* ones(%d,1);\n", (j + 1), midpoint[j], count[j]));
 
@@ -69,7 +77,9 @@ public class Histograms {
                 output.write(String.format(Locale.US, "x%d;", (j + 1)));
             output.write(String.format(Locale.US, "x%d],%d,'HandleVisibility','off')\n", K, K));
 
-            output.write("legend");
+
+            output.write(String.format(Locale.US,"xline(%f,'DisplayName','Analytical value','color','red','LineWidth', 1.5)\nlegend\n", analyticalValue));
+            output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
 
             output.flush();
             output.close();
