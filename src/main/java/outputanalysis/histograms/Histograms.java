@@ -78,7 +78,7 @@ public class Histograms {
             output.write(String.format(Locale.US, "x%d],%d,'HandleVisibility','off')\n", K, K));
 
 
-            output.write(String.format(Locale.US,"xline(%f,'DisplayName','Analytical value','color','red','LineWidth', 1.5)\nlegend\n", analyticalValue));
+            output.write(String.format(Locale.US,"xline(%f,'DisplayName','Analytical value','color','red','LineWidth', 1.5)\nlegend('location','best')\n", analyticalValue));
             output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
 
             output.flush();

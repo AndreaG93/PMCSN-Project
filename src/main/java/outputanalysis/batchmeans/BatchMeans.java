@@ -73,7 +73,7 @@ public class BatchMeans {
             FileWriter output = new FileWriter(outputFileName, true);
 
             if(SimulationRegistry.getInstance().isFirstSimulationReplications()) {
-                output.write("h=figure\n");
+                output.write("h=figure\nxlabel('Replication ID')\n");
                 output.write(String.format(Locale.US,"xlim([-1 %d])\nhold on\n", SimulationRegistry.getInstance().getTotalSimulationReplications()+1));
             }
 
@@ -82,7 +82,7 @@ public class BatchMeans {
                     replicationIndex, replicationIndex, this.batchMeansStatistic.getMean() - distanceFromMean, this.batchMeansStatistic.getMean() + distanceFromMean));
 
             if (SimulationRegistry.getInstance().AreSimulationReplicationsTerminate()) {
-                output.write(String.format(Locale.US, "yline(%f,'DisplayName','Analytical value')\nlegend\n", analyticalValue));
+                output.write(String.format(Locale.US, "yline(%f,'DisplayName','Analytical value')\nlegend('location','best')\n", analyticalValue));
                 output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
             }
 

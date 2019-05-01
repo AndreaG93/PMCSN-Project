@@ -21,7 +21,7 @@ class ScatterPlot {
 
     void add(double x, double y) {
 
-        if (this.discardedSamples == 300){
+        if (this.discardedSamples == 300) {
             this.values.add(new ScatterPlotPoint(x, y));
             this.discardedSamples = 0;
         }
@@ -35,32 +35,36 @@ class ScatterPlot {
         try {
             FileWriter output = new FileWriter(String.format("./output/ScatterPlot_%s.m", this.name), true);
 
-            if(SimulationRegistry.getInstance().isFirstSimulationReplications()) {
-                output.write("h=figure\n");
-                output.write("xlim([-1000 inf])\nhold on\n");
+            if (replicationIndex <= 5) {
+
+                if (SimulationRegistry.getInstance().isFirstSimulationReplications()) {
+                    output.write("h=figure\n");
+                    output.write("xlim([-1000 inf])\nhold on\n");
+                }
+
+                // X
+                output.write(String.format("x%d = [ ", replicationIndex));
+                for (ScatterPlotPoint point : this.values) {
+                    output.write(String.format(Locale.US, " %f ", point.getX()));
+                }
+                output.write(" ];\n");
+
+                // Y
+                output.write(String.format("y%d = [ ", replicationIndex));
+                for (ScatterPlotPoint point : this.values) {
+                    output.write(String.format(Locale.US, " %f ", point.getY()));
+                }
+                output.write(" ];\n");
+
+                // Add scatter plot...
+
+                output.write(String.format("scatter(x%d,y%d,'.','DisplayName','Replication %d')\nhold on\n", replicationIndex, replicationIndex, replicationIndex));
+
             }
 
-            // X
-            output.write(String.format("x%d = [ ", replicationIndex));
-            for (ScatterPlotPoint point : this.values) {
-                output.write(String.format(Locale.US, " %f ", point.getX()));
-            }
-            output.write(" ];\n");
-
-            // Y
-            output.write(String.format("y%d = [ ", replicationIndex));
-            for (ScatterPlotPoint point : this.values) {
-                output.write(String.format(Locale.US, " %f ", point.getY()));
-            }
-            output.write(" ];\n");
-
-            // Add scatter plot...
-
-            output.write(String.format("scatter(x%d,y%d,'.','DisplayName','Replication %d')\nhold on\n",
-                    replicationIndex, replicationIndex, replicationIndex));
 
             if (SimulationRegistry.getInstance().AreSimulationReplicationsTerminate()) {
-                output.write(String.format(Locale.US, "yline(%f,'DisplayName','Analytical value','color','black','LineWidth', 1.5)\nlegend\n", analyticalValue));
+                output.write(String.format(Locale.US, "yline(%f,'DisplayName','Analytical value','color','black','LineWidth', 1.5)\nlegend('location','best')\n", analyticalValue));
                 output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
             }
 

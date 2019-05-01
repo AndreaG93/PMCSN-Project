@@ -6,18 +6,6 @@ import java.util.HashMap;
 
 public class SimulationAnalyticValueRegistryAlgorithm1 extends SimulationAnalyticValueRegistry {
 
-    private static SimulationAnalyticValueRegistryAlgorithm1 instance = null;
-
-    private SimulationAnalyticValueRegistryAlgorithm1(){
-        super();
-    }
-
-    public static SimulationAnalyticValueRegistryAlgorithm1 getInstance() {
-        if (instance == null)
-            instance = new SimulationAnalyticValueRegistryAlgorithm1();
-        return instance;
-    }
-
     @Override
     protected void loadDataIntoRegistry() {
 

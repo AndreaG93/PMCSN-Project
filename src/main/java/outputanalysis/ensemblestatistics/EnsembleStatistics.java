@@ -89,7 +89,7 @@ class EnsembleStatistics {
                 this.ensembleStatistics.getMean() - 2 * this.ensembleStatistics.getStandardDeviation(), this.ensembleStatistics.getMean() + 2 * this.ensembleStatistics.getStandardDeviation()));
 
         output.write("set(gca,'YTickLabel',[])\n");
-        output.write("hold off\nlegend\n");
+        output.write("hold off\nlegend('location','best')\n");
         output.write(String.format("saveas(h, '%s', 'png')\n", this.getClass().getSimpleName() + this.name));
 
         output.flush();

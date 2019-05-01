@@ -12,6 +12,10 @@ import java.io.File;
 
 public class EntryPoint {
 
+    private static int numberOfReplications = 1;
+    private static int algorithm = 2;
+    private static NextEventSimulation simulation;
+
     public static void main(String args[]) {
 
         File index = new File("./output");
@@ -19,10 +23,15 @@ public class EntryPoint {
             index.mkdir();
         }
 
+        SimulationRegistry.getInstance().setTotalSimulationReplications(numberOfReplications - 1);
 
-        SimulationRegistry.getInstance().setTotalSimulationReplications(9);
+        for (int currentReplicationIndex = 0; currentReplicationIndex <= (numberOfReplications - 1); currentReplicationIndex++) {
 
-        for (int currentReplicationIndex = 0; currentReplicationIndex <= 9; currentReplicationIndex++){
+            if (algorithm == 1) {
+                simulation = SystemFactory.buildSystemUsingRoutingAlgorithm1();
+            } else
+                simulation = SystemFactory.buildSystemUsingRoutingAlgorithm2();
+
 
             SimulationRegistry.getInstance().setCurrentSimulationReplicationIndex(currentReplicationIndex);
 
@@ -31,12 +40,7 @@ public class EntryPoint {
             ScatterPlotRegister.getInstance().initialize();
             HistogramsRegister.getInstance().initialize();
 
-            NextEventSimulation simulation1 = SystemFactory.buildSystemUsingRoutingAlgorithm1();
-            NextEventSimulation simulation2 = SystemFactory.buildSystemUsingRoutingAlgorithm2();
-
-            //simulation1.perform();
-            simulation2.perform();
-
+            simulation.perform();
         }
 
         EnsembleStatisticsRegister.getInstance().computeStatisticsWritingOutputData();

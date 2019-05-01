@@ -6,20 +6,6 @@ import java.util.HashMap;
 
 public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyticValueRegistry {
 
-    private static SimulationAnalyticValueRegistryAlgorithm2 instance = null;
-
-    private SimulationAnalyticValueRegistryAlgorithm2(){
-        super();
-    }
-
-    public static SimulationAnalyticValueRegistryAlgorithm2 getInstance() {
-        if (instance == null)
-            instance = new SimulationAnalyticValueRegistryAlgorithm2();
-        return instance;
-    }
-
-
-
     @Override
     protected void loadDataIntoRegistry() {
 
@@ -40,8 +26,8 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
         // GlobalNetwork Time-Average Population
 
         this.register.put("GlobalNetwork_Class1JobsNumber", 8.892712995);
-        this.register.put("GlobalNetwork_Class2JobsNumber", 26.253591551);
-        this.register.put("GlobalNetwork_JobsNumber", 35.146304546);
+        this.register.put("GlobalNetwork_Class2JobsNumber", 27.375749424);
+        this.register.put("GlobalNetwork_JobsNumber", 36.2684624);
 
         // ***************************************************************** //
 
@@ -60,8 +46,8 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
         // GlobalNetwork Time-Average Service Time
 
         this.register.put("GlobalNetwork_Class1JobsServiceTime", 2.223178248);
-        this.register.put("GlobalNetwork_Class2JobsServiceTime", 4.079733115);
-        this.register.put("GlobalNetwork_JobsServiceTime", 3.355223899);
+        this.register.put("GlobalNetwork_Class2JobsServiceTime", 4.380119907);
+        this.register.put("GlobalNetwork_JobsServiceTime", 3.538386577);
 
         // ***************************************************************** //
 

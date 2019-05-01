@@ -11,6 +11,6 @@ class SystemUsingRoutingAlgorithm2 extends System {
 
         this.controller = new ControllerUsingRoutingAlgorithm2(this);
 
-        SimulationRegistry.getInstance().setAnalyticalValueRegistry(SimulationAnalyticValueRegistryAlgorithm2.getInstance());
+        SimulationRegistry.getInstance().setAnalyticalValueRegistry(new SimulationAnalyticValueRegistryAlgorithm2());
     }
 }
