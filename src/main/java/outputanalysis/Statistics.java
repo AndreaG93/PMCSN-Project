@@ -11,6 +11,7 @@ public class Statistics {
     double standardDeviation;
     double max;
     double min;
+    double errorMarginFromExactValue;
 
     public Statistics(List<Double> randomValuesList){
         this.randomValuesList = randomValuesList;
@@ -57,6 +58,9 @@ public class Statistics {
         return ((criticalValue * this.standardDeviation) / Math.sqrt(randomSampleSize - 1));
     }
 
+
+
+
     public double getStandardDeviation() {
         return standardDeviation;
     }
@@ -68,5 +72,10 @@ public class Statistics {
     public double getMin() {
         return min;
     }
+
+    public double getMeanErrorMarginFromExactValueMean(double exactValueMean) {
+        return ((Math.abs(this.mean - exactValueMean))/this.mean)*100;
+    }
+
 }
 

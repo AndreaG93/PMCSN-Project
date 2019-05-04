@@ -14,6 +14,7 @@ class EnsembleStatistics {
     private String name;
     private List<Double> values;
     private Statistics ensembleStatistics;
+    private double errorMarginFromExactValue;
 
     EnsembleStatistics(String name) {
         this.values = new Vector<Double>();
@@ -29,6 +30,10 @@ class EnsembleStatistics {
         this.ensembleStatistics = new Statistics(this.values);
 
         try {
+
+            double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
+            this.errorMarginFromExactValue = this.ensembleStatistics.getMeanErrorMarginFromExactValueMean(analyticalValue);
+
             writeEnsembleOutputStatistic();
             writeEnsembleOutputStatisticForMATLABGraphics();
         } catch (IOException e) {
@@ -47,6 +52,9 @@ class EnsembleStatistics {
 
         output.write(String.format(Locale.US, "\nEnsemble average point estimate    : %f \n", this.ensembleStatistics.getMean()));
         output.write(String.format(Locale.US, "\nEnsemble average interval estimate : %f \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
+        output.write(String.format(Locale.US, "\nError margin from exact mean       : %.2f %s \n", this.errorMarginFromExactValue*100.00, "%"));
+        output.write(String.format(Locale.US, "\nError margin                       : %.2f %s \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)*100, "%"));
+        output.write(String.format(Locale.US, "\nInterval                           : %f +- %f \n", this.ensembleStatistics.getMean(), this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
 
         output.flush();
         output.close();

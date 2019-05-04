@@ -12,8 +12,8 @@ import java.io.File;
 
 public class EntryPoint {
 
-    private static int numberOfReplications = 1;
-    private static int algorithm = 2;
+    private static int numberOfReplications = 9;
+    private static int algorithm = 1;
     private static NextEventSimulation simulation;
 
     public static void main(String args[]) {
