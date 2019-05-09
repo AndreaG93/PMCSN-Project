@@ -9,8 +9,6 @@ import outputanalysis.ensemblestatistics.EnsembleStatisticsRegister;
 import outputanalysis.histograms.HistogramsRegister;
 import outputanalysis.scatterplots.ScatterPlotRegister;
 
-import java.io.File;
-
 public class EntryPoint {
 
     public static void main(String[] args) {
