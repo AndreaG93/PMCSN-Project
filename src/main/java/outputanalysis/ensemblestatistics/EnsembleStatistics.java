@@ -43,7 +43,7 @@ class EnsembleStatistics {
 
     private void writeEnsembleOutputStatistic() throws IOException {
 
-        FileWriter output = new FileWriter(String.format("./output/ensembleStatistics_%s", this.name));
+        FileWriter output = new FileWriter(String.format("%s/ensembleStatistics_%s", SimulationRegistry.getInstance().getOutputDirectoryName(), this.name));
 
         output.write(String.format(Locale.US, "Metric name: %s \n\n", this.name));
 
@@ -64,7 +64,7 @@ class EnsembleStatistics {
 
         double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
 
-        FileWriter output = new FileWriter(String.format("./output/ensembleStatistics_%s.m", this.name));
+        FileWriter output = new FileWriter(String.format("%s/ensembleStatistics_%s.m", SimulationRegistry.getInstance().getOutputDirectoryName(), this.name));
 
         double distanceFromMean = this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95);
 

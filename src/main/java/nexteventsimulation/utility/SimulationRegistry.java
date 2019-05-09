@@ -5,8 +5,8 @@ public class SimulationRegistry {
     private static SimulationRegistry instance = null;
 
     private int currentSimulationReplicationIndex;
-
     private int totalSimulationReplications;
+    private String outputDirectoryName = "";
 
     private SimulationAnalyticValueRegistry analyticalValueRegistry;
 
@@ -49,5 +49,13 @@ public class SimulationRegistry {
 
     public int getTotalSimulationReplications() {
         return totalSimulationReplications;
+    }
+
+    public String getOutputDirectoryName() {
+        return outputDirectoryName;
+    }
+
+    public void setOutputDirectoryName(String outputDirectoryName) {
+        this.outputDirectoryName = outputDirectoryName;
     }
 }

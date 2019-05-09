@@ -1,6 +1,5 @@
 package outputanalysis.batchmeans;
 
-import nexteventsimulation.utility.RandomNumberGenerator;
 import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
 import java.io.FileWriter;
@@ -14,8 +13,6 @@ public class BatchMeans {
     private String name;
     private List<Double> values;
     private List<Statistics> batches;
-
-    private int batchSize;
     private Statistics batchMeansStatistic;
 
     BatchMeans(String name) {
@@ -65,7 +62,7 @@ public class BatchMeans {
 
         double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
 
-        String outputFileName = String.format("./output/BM_%s.m", name);
+        String outputFileName = String.format("%s/BM_%s.m", SimulationRegistry.getInstance().getOutputDirectoryName(), this.name);
 
         double distanceFromMean = this.batchMeansStatistic.getConfidenceIntervalDistanceFromMean(0.95);
 
@@ -92,9 +89,5 @@ public class BatchMeans {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setBatchSize(int size) {
-        this.batchSize = size;
     }
 }

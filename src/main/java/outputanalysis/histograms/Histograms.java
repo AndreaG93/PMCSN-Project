@@ -60,7 +60,7 @@ public class Histograms {
 
         try {
 
-            FileWriter output = new FileWriter(String.format("./output/Histogram_%s_%d.m", this.name, replicationIndex));
+            FileWriter output = new FileWriter(String.format("%s/Histogram_%s_%d.m", SimulationRegistry.getInstance().getOutputDirectoryName(), this.name, replicationIndex));
 
             output.write("h=figure\n");
 

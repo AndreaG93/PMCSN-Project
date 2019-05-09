@@ -33,7 +33,7 @@ class ScatterPlot {
         double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
 
         try {
-            FileWriter output = new FileWriter(String.format("./output/ScatterPlot_%s.m", this.name), true);
+            FileWriter output = new FileWriter(String.format("%s/ScatterPlot_%s.m", SimulationRegistry.getInstance().getOutputDirectoryName(), this.name), true);
 
             if (replicationIndex <= 5) {
 
@@ -57,9 +57,7 @@ class ScatterPlot {
                 output.write(" ];\n");
 
                 // Add scatter plot...
-
                 output.write(String.format("scatter(x%d,y%d,'.','DisplayName','Replication %d')\nhold on\n", replicationIndex, replicationIndex, replicationIndex));
-
             }
 
 

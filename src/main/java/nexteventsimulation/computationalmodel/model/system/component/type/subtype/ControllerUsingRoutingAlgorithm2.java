@@ -28,7 +28,6 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
         return output;
     }
 
-
     @Override
     protected void performRoutingAlgorithm(SystemEvent event) {
 
