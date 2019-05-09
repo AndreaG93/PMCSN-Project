@@ -53,5 +53,9 @@ public abstract class Controller extends SystemComponent {
     public void scheduleFollowingEventAfterClass2JobDeparture() {
     }
 
+    @Override
+    public void scheduleFollowingEventAfterPreviouslyInterruptedClass2JobArrival() {
+    }
+
     protected abstract void performRoutingAlgorithm(SystemEvent event);
 }

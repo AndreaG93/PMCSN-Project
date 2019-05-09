@@ -124,7 +124,7 @@ public abstract class System extends ComputationalModel {
             this.simulationEventList.schedule(event);
     }
 
-    public void removeFarthermostCloudletClass2JobDeparture() {
+    public double removeCloudletClass2JobDeparture() {
 
         RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.getInstance();
 
@@ -133,9 +133,11 @@ public abstract class System extends ComputationalModel {
                 if (event instanceof Class2JobDeparture && ((SystemEvent) event).getSystemComponent() instanceof Cloudlet)
                     if (randomNumberGenerator.getUniformBetween(0, 100) <= 1) {
 
+                        double runningTime = SimulationClock.getInstance().getCurrentEventTime() - ((Class2JobDeparture) event).getJobExecutionStartTime();
+
                         this.simulationEventList.remove(event);
                         this.cloudlet.decreaseNumberOfClass2Jobs();
-                        return;
+                        return runningTime;
                     }
         }
     }

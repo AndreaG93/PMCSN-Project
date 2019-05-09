@@ -20,14 +20,12 @@ public class Cloudlet extends SystemComponent {
 
     @Override
     public void scheduleFollowingEventAfterClass1JobArrival() {
-
         SystemEvent event = SystemEventFactory.buildClass1JobDeparture();
         this.system.scheduleEventOnCloudlet(event, this.getNextClass1JobServiceTime());
     }
 
     @Override
     public void scheduleFollowingEventAfterClass2JobArrival() {
-
         SystemEvent event = SystemEventFactory.buildClass2JobDeparture();
         this.system.scheduleEventOnCloudlet(event, this.getNextClass2JobServiceTime());
     }
@@ -40,5 +38,9 @@ public class Cloudlet extends SystemComponent {
     @Override
     public void scheduleFollowingEventAfterClass2JobDeparture() {
         this.system.scheduleEventOnGlobalNetwork(SystemEventFactory.buildClass2JobDeparture());
+    }
+
+    @Override
+    public void scheduleFollowingEventAfterPreviouslyInterruptedClass2JobArrival() {
     }
 }

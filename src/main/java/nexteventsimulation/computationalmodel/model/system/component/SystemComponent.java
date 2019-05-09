@@ -22,13 +22,17 @@ public abstract class SystemComponent {
 
     private int numberOfClass1Jobs;
     private int numberOfClass2Jobs;
+    private int numberOfPreviouslyInterruptedClass2Jobs;
+
     private int numberOfClass1DepartedJobs;
     private int numberOfClass2DepartedJobs;
+    private int numberOfPreviouslyInterruptedClass2DepartedJobs;
 
     private double areaNumberOfClass1Jobs = 0.0;
     private double areaNumberOfClass2Jobs = 0.0;
     private double areaServiceTimeClass1Jobs = 0.0;
     private double areaServiceTimeClass2Jobs = 0.0;
+    private double areaServiceTimePreviouslyInterruptedClass2Jobs = 0.0;
 
     private double areaServiceTime = 0.0;
     private double areaNumberOfJobs = 0.0;
@@ -48,6 +52,8 @@ public abstract class SystemComponent {
     public abstract void scheduleFollowingEventAfterClass1JobDeparture();
 
     public abstract void scheduleFollowingEventAfterClass2JobDeparture();
+
+    public abstract void scheduleFollowingEventAfterPreviouslyInterruptedClass2JobArrival();
 
     public void initializeSystemStateVariables() {
         this.numberOfClass1Jobs = 0;
@@ -72,6 +78,20 @@ public abstract class SystemComponent {
     public void updateStatusAfterClass2JobDeparture() {
         this.numberOfClass2Jobs--;
         this.numberOfClass2DepartedJobs++;
+    }
+
+    public void updateStatusAfterPreviouslyInterruptedClass2JobArrival(double delay) {
+        updateStatusAfterClass2JobArrival();
+
+        this.numberOfPreviouslyInterruptedClass2Jobs++;
+        this.areaServiceTimePreviouslyInterruptedClass2Jobs += delay;
+    }
+
+    public void updateStatusAfterPreviouslyInterruptedClass2JobDeparture() {
+        updateStatusAfterClass2JobDeparture();
+
+        this.numberOfPreviouslyInterruptedClass2Jobs--;
+        this.numberOfPreviouslyInterruptedClass2DepartedJobs++;
     }
 
     protected double getNextClass1JobInterArrivalTime() {
@@ -99,6 +119,9 @@ public abstract class SystemComponent {
         SimulationClock simulationClock = SimulationClock.getInstance();
         String currentComponent = this.getClass().getSimpleName();
 
+        if (this instanceof Cloud)
+            areaServiceTimePreviouslyInterruptedClass2Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfPreviouslyInterruptedClass2Jobs;
+
         areaNumberOfClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
         areaServiceTimeClass1Jobs += (simulationClock.getNextEventTime() - simulationClock.getCurrentEventTime()) * numberOfClass1Jobs;
 
@@ -115,7 +138,6 @@ public abstract class SystemComponent {
         batchMeansRegister.addDataToBatch(currentComponent + "_Class1Throughput", (this.numberOfClass1DepartedJobs) / SimulationClock.getInstance().getCurrentEventTime());
         batchMeansRegister.addDataToBatch(currentComponent + "_Class2Throughput", (this.numberOfClass2DepartedJobs) / SimulationClock.getInstance().getCurrentEventTime());
         batchMeansRegister.addDataToBatch(currentComponent + "_Throughput", (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs) / SimulationClock.getInstance().getCurrentEventTime());
-
 
         if (numberOfClass1DepartedJobs > 0)
             batchMeansRegister.addDataToBatch(currentComponent + "_Class1JobsServiceTime", this.areaServiceTimeClass1Jobs / this.numberOfClass1DepartedJobs);
@@ -164,6 +186,10 @@ public abstract class SystemComponent {
 
         output.put(String.format("%s_Class1JobsServiceTime", componentName), this.areaServiceTimeClass1Jobs / this.numberOfClass1DepartedJobs);
         output.put(String.format("%s_Class2JobsServiceTime", componentName), this.areaServiceTimeClass2Jobs / this.numberOfClass2DepartedJobs);
+
+        if (this instanceof Cloud)
+            output.put(String.format("%s_PreviouslyInterruptedClass2JobsServiceTime", componentName), this.areaServiceTimePreviouslyInterruptedClass2Jobs / this.numberOfPreviouslyInterruptedClass2DepartedJobs);
+
         output.put(String.format("%s_JobsServiceTime", componentName), this.areaServiceTime / (this.numberOfClass1DepartedJobs + this.numberOfClass2DepartedJobs));
 
         output.put(String.format("%s_JobsNumber", componentName), this.areaNumberOfJobs / SimulationClock.getInstance().getCurrentEventTime());

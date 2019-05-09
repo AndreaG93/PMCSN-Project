@@ -43,4 +43,8 @@ public class GlobalNetwork extends SystemComponent {
     @Override
     public void scheduleFollowingEventAfterClass2JobDeparture() {
     }
+
+    @Override
+    public void scheduleFollowingEventAfterPreviouslyInterruptedClass2JobArrival() {
+    }
 }

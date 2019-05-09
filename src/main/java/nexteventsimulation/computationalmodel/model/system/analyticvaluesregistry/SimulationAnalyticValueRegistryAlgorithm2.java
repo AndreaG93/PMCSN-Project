@@ -68,5 +68,10 @@ public class SimulationAnalyticValueRegistryAlgorithm2 extends SimulationAnalyti
         this.register.put("GlobalNetwork_Class1Throughput", 4.0);
         this.register.put("GlobalNetwork_Class2Throughput", 6.25);
         this.register.put("GlobalNetwork_Throughput", 10.25);
+
+        // ***************************************************************** //
+
+        this.register.put("Cloud_PreviouslyInterruptedClass2JobsServiceTime", 7.7491582491582491582491582491582);
+
     }
 }

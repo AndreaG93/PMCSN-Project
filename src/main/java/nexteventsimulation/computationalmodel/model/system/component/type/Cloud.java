@@ -20,16 +20,17 @@ public class Cloud extends SystemComponent {
 
     @Override
     public void scheduleFollowingEventAfterClass1JobArrival() {
-
-        SystemEvent event = SystemEventFactory.buildClass1JobDeparture();
-        this.system.scheduleEventOnCloud(event, this.getNextClass1JobServiceTime());
+        this.system.scheduleEventOnCloud(SystemEventFactory.buildClass1JobDeparture(), this.getNextClass1JobServiceTime());
     }
 
     @Override
     public void scheduleFollowingEventAfterClass2JobArrival() {
+        this.system.scheduleEventOnCloud(SystemEventFactory.buildClass2JobDeparture(), this.getNextClass2JobServiceTime());
+    }
 
-        SystemEvent event = SystemEventFactory.buildClass2JobDeparture();
-        this.system.scheduleEventOnCloud(event, this.getNextClass2JobServiceTime());
+    @Override
+    public void scheduleFollowingEventAfterPreviouslyInterruptedClass2JobArrival() {
+        this.system.scheduleEventOnCloud(SystemEventFactory.buildPreviouslyInterruptedClass2JobDeparture(), this.getNextClass2JobServiceTime());
     }
 
     @Override

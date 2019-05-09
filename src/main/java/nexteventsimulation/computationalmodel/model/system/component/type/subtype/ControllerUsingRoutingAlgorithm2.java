@@ -13,7 +13,9 @@ import java.util.Map;
 
 public class ControllerUsingRoutingAlgorithm2 extends Controller {
 
-    private int numberOfInterruptedClass2Jobs = 0;
+    private double numberOfInterruptedClass2Jobs = 0;
+    private double numberOfClass2JobsForwardedToCloudlet = 0;
+    private double numberOfTotalClass2Jobs = 0;
 
     public ControllerUsingRoutingAlgorithm2(System system) {
         super(system);
@@ -23,7 +25,9 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
     public Map<String, Double> getStatistics() {
 
         Map<String, Double> output = new HashMap<String, Double>();
-        output.put("InterruptedClass2JobsNumber", this.numberOfInterruptedClass2Jobs / SimulationClock.getInstance().getCurrentEventTime());
+        output.put("InterruptedClass2JobsNumber", this.numberOfInterruptedClass2Jobs);
+        output.put("InterruptedClass2JobsNumberPercentage", this.numberOfInterruptedClass2Jobs / this.numberOfClass2JobsForwardedToCloudlet * 100.00);
+        output.put("InterruptedClass2JobsNumberPercentageGlobal", this.numberOfInterruptedClass2Jobs / this.numberOfTotalClass2Jobs * 100.00);
 
         return output;
     }
@@ -42,13 +46,13 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
                 this.system.scheduleEventOnCloudlet(event, 0);
             else if (n2 > 0) {
 
-                this.system.removeFarthermostCloudletClass2JobDeparture();
+                double runningCloudletTimeOfInterruptedJob = this.system.removeCloudletClass2JobDeparture();
 
                 this.system.scheduleEventOnCloudlet(event, 0);
 
                 double setupTime = RandomNumberGenerator.getInstance().getExponential(5, 0.8);
 
-                this.system.scheduleEventOnCloud(SystemEventFactory.buildClass2JobArrival(), setupTime);
+                this.system.scheduleEventOnCloud(SystemEventFactory.buildPreviouslyInterruptedClass2JobArrival(setupTime + runningCloudletTimeOfInterruptedJob), setupTime);
 
                 this.numberOfInterruptedClass2Jobs++;
 
@@ -58,10 +62,14 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
 
         } else {
 
+            this.numberOfTotalClass2Jobs++;
+
             if ((n1 + n2) >= this.system.getThreshold())
                 this.system.scheduleEventOnCloud(event, 0);
-            else
+            else {
+                this.numberOfClass2JobsForwardedToCloudlet++;
                 this.system.scheduleEventOnCloudlet(event, 0);
+            }
         }
     }
 }
