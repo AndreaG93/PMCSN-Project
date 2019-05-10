@@ -4,7 +4,7 @@ import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 
 public class PreviouslyInterruptedClass2JobArrival extends SystemEvent {
 
-    double delay;
+    private double delay;
 
     public PreviouslyInterruptedClass2JobArrival(double delay) {
         this.delay = delay;
