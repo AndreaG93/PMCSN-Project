@@ -1,5 +1,4 @@
 import nexteventsimulation.NextEventSimulation;
-
 import nexteventsimulation.computationalmodel.model.system.SystemFactory;
 import nexteventsimulation.utility.FileManagement;
 import nexteventsimulation.utility.RandomNumberGenerator;

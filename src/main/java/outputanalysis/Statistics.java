@@ -9,11 +9,8 @@ public class Statistics {
     List<Double> randomValuesList;
     double mean;
     double standardDeviation;
-    double max;
-    double min;
-    double errorMarginFromExactValue;
 
-    public Statistics(List<Double> randomValuesList){
+    public Statistics(List<Double> randomValuesList) {
         this.randomValuesList = randomValuesList;
 
         computeMeanAndStandardDeviation();
@@ -32,11 +29,6 @@ public class Statistics {
             diff = value - this.mean;
             sum += Math.pow(diff, 2) * ((n - 1.0) / n);
             this.mean += diff / n;
-
-            if (value > max)
-                max = value;
-            else if (value < min)
-                min = value;
         }
 
         this.standardDeviation = Math.sqrt(sum / n);
@@ -58,24 +50,8 @@ public class Statistics {
         return ((criticalValue * this.standardDeviation) / Math.sqrt(randomSampleSize - 1));
     }
 
-
-
-
     public double getStandardDeviation() {
         return standardDeviation;
     }
-
-    public double getMax() {
-        return max;
-    }
-
-    public double getMin() {
-        return min;
-    }
-
-    public double getMeanErrorMarginFromExactValueMean(double exactValueMean) {
-        return ((Math.abs(this.mean - exactValueMean))/this.mean)*100;
-    }
-
 }
 

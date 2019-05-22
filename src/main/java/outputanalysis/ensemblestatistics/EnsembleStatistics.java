@@ -2,7 +2,6 @@ package outputanalysis.ensemblestatistics;
 
 import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +13,6 @@ class EnsembleStatistics {
     private String name;
     private List<Double> values;
     private Statistics ensembleStatistics;
-    private double errorMarginFromExactValue;
 
     EnsembleStatistics(String name) {
         this.values = new Vector<Double>();
@@ -30,10 +28,6 @@ class EnsembleStatistics {
         this.ensembleStatistics = new Statistics(this.values);
 
         try {
-
-            double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
-            this.errorMarginFromExactValue = this.ensembleStatistics.getMeanErrorMarginFromExactValueMean(analyticalValue);
-
             writeEnsembleOutputStatistic();
             writeEnsembleOutputStatisticForMATLABGraphics();
         } catch (IOException e) {
@@ -51,9 +45,7 @@ class EnsembleStatistics {
             output.write(String.format(Locale.US, "Replication n. %d                   : %f \n", replicationNumber, this.values.get(replicationNumber)));
 
         output.write(String.format(Locale.US, "\nEnsemble average point estimate    : %f \n", this.ensembleStatistics.getMean()));
-        output.write(String.format(Locale.US, "\nEnsemble average interval estimate : %f \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
-        output.write(String.format(Locale.US, "\nError margin from exact mean       : %.2f %s \n", this.errorMarginFromExactValue*100.00, "%"));
-        output.write(String.format(Locale.US, "\nError margin                       : %.2f %s \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)*100, "%"));
+        output.write(String.format(Locale.US, "\nStandard error                     : %f \n", this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
         output.write(String.format(Locale.US, "\nInterval                           : %f +- %f \n", this.ensembleStatistics.getMean(), this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95)));
 
         output.flush();
@@ -87,11 +79,13 @@ class EnsembleStatistics {
         // Add scatter plot...
 
         output.write("hold on\nylim([-0.01 0.01])\n");
+        output.write(String.format(Locale.US, "title('I_{95%s} = [%f, %f]          v_{Analytical value} = %f')\n", "%",
+                this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean, analyticalValue));
         output.write("scatter(x,y,'filled','DisplayName','Transient statistic value.')\n");
         output.write(String.format(Locale.US, "xline(%f,'DisplayName','Analytical value')\n", analyticalValue));
 
-        output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval.')\n",
-                this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean));
+        output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval 95%s.')\n",
+                this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean, "%"));
 
         output.write(String.format(Locale.US, "plot([%f %f],[0.0005 0.0005],'color','green','LineWidth', 1,'DisplayName', 'Effective sample width: [x-2s,x+2s]')\n",
                 this.ensembleStatistics.getMean() - 2 * this.ensembleStatistics.getStandardDeviation(), this.ensembleStatistics.getMean() + 2 * this.ensembleStatistics.getStandardDeviation()));
