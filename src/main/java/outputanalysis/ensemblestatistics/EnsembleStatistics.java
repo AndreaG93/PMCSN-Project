@@ -79,10 +79,12 @@ class EnsembleStatistics {
         // Add scatter plot...
 
         output.write("hold on\nylim([-0.01 0.01])\n");
-        output.write(String.format(Locale.US, "title('I_{95%s} = [%f, %f]          v_{Analytical value} = %f')\n", "%",
+        output.write(String.format(Locale.US, "title('Avg = %f \\pm %f\\newline", this.ensembleStatistics.getMean(), distanceFromMean));
+        output.write(String.format(Locale.US, "I_{95%s} = [%f, %f]          v_{Analytical value} = %f')\n", "%",
                 this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean, analyticalValue));
         output.write("scatter(x,y,'filled','DisplayName','Transient statistic value.')\n");
         output.write(String.format(Locale.US, "xline(%f,'DisplayName','Analytical value')\n", analyticalValue));
+        output.write(String.format(Locale.US, "xline(%f,'DisplayName','Computed mean value','color','blue','LineWidth', 1)\n", this.ensembleStatistics.getMean()));
 
         output.write(String.format(Locale.US, "plot([%f %f],[0 0],'color','red','LineWidth', 1,'DisplayName', 'Confidence interval 95%s.')\n",
                 this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean, "%"));
