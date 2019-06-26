@@ -51,7 +51,6 @@ public abstract class System extends ComputationalModel {
         this.cloud.updateStatistics();
         this.cloudlet.updateStatistics();
         this.globalNetwork.updateStatistics();
-
     }
 
     @Override

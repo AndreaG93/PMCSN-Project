@@ -2,7 +2,7 @@ package nexteventsimulation.computationalmodel.model.system.matlab.CTMC;
 
 public class CTMCResolverEntryPoint {
 
-    public static void main(String args[]){
+    public static void main(String[] value){
 
         CTMCResolverScriptGenerator CTMCUsingRoutingAlgorithm1 = new ResolverUsingRoutingAlgorithm1();
         CTMCResolverScriptGenerator CTMCUsingRoutingAlgorithm2 = new ResolverUsingRoutingAlgorithm2();

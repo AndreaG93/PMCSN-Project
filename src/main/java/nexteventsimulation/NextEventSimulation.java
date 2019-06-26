@@ -1,5 +1,5 @@
 package nexteventsimulation;
 
 public interface NextEventSimulation {
-    void perform();
+    public void perform();
 }

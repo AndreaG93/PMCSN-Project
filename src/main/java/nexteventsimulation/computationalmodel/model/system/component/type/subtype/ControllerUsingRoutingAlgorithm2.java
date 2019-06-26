@@ -6,8 +6,6 @@ import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
 import nexteventsimulation.computationalmodel.model.system.event.type.Class1JobArrival;
 import nexteventsimulation.utility.RandomNumberGenerator;
-import nexteventsimulation.utility.SimulationClock;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +22,7 @@ public class ControllerUsingRoutingAlgorithm2 extends Controller {
     @Override
     public Map<String, Double> getStatistics() {
 
-        Map<String, Double> output = new HashMap<String, Double>();
+        Map<String, Double> output = new HashMap<>();
         output.put("InterruptedClass2JobsNumber", this.numberOfInterruptedClass2Jobs);
         output.put("InterruptedClass2JobsNumberPercentage", this.numberOfInterruptedClass2Jobs / this.numberOfClass2JobsForwardedToCloudlet * 100.00);
         output.put("InterruptedClass2JobsNumberPercentageGlobal", this.numberOfInterruptedClass2Jobs / this.numberOfTotalClass2Jobs * 100.00);

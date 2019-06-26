@@ -13,7 +13,7 @@ import java.util.Map;
 
 public abstract class ComputationalModel implements NextEventSimulation {
 
-    protected SimulationEventList<SimulationEvent> simulationEventList = new SimulationEventList<SimulationEvent>();
+    protected SimulationEventList<SimulationEvent> simulationEventList = new SimulationEventList<>();
 
     protected abstract void initializeSystemStateVariables();
 
@@ -53,22 +53,15 @@ public abstract class ComputationalModel implements NextEventSimulation {
         ScatterPlotRegister.getInstance().writingOutputData();
         HistogramsRegister.getInstance().computeStatisticsAndWriteData();
 
-        manageCurrentSimulationResult();
+        EnsembleStatisticsRegister ensembleStatisticsRegister = EnsembleStatisticsRegister.getInstance();
+
+        for (Map.Entry<String, Double> pair : getSimulationResults().entrySet())
+            ensembleStatisticsRegister.addDataToEnsemble(pair.getKey(), pair.getValue());
     }
-
-
 
     private void initializeSimulation() {
         initializeSystemStateVariables();
         initializeSimulationClock();
         scheduleInitialEvent();
-    }
-
-    private void manageCurrentSimulationResult() {
-
-        EnsembleStatisticsRegister ensembleStatisticsRegister = EnsembleStatisticsRegister.getInstance();
-
-        for (Map.Entry<String, Double> pair : getSimulationResults().entrySet())
-            ensembleStatisticsRegister.addDataToEnsemble(pair.getKey(), pair.getValue());
     }
 }

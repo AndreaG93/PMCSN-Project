@@ -1,7 +1,6 @@
 package nexteventsimulation.computationalmodel.model.system.component.type;
 
 import nexteventsimulation.computationalmodel.model.system.System;
-import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEventFactory;
 import nexteventsimulation.computationalmodel.model.system.component.SystemComponent;
 

@@ -3,8 +3,6 @@ package nexteventsimulation.computationalmodel.model.system.component.type.subty
 import nexteventsimulation.computationalmodel.model.system.System;
 import nexteventsimulation.computationalmodel.model.system.component.type.Controller;
 import nexteventsimulation.computationalmodel.model.system.event.SystemEvent;
-import nexteventsimulation.utility.SimulationClock;
-
 import java.util.HashMap;
 import java.util.Map;
 

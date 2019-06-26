@@ -152,10 +152,7 @@ public class ResolverUsingRoutingAlgorithm2 extends CTMCResolverScriptGenerator 
                 if (n2 == 0 && n1 >= S + 1) {
                     this.MATLABScriptFile.write(String.format(" + solution.%s", pi(n1, n2)));
                 }
-
             }
-
-
         this.MATLABScriptFile.write(";\n");
     }
 

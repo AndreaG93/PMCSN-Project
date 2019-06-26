@@ -7,17 +7,16 @@ import java.util.Map;
 
 public abstract class CTMCResolverScriptGenerator {
 
-    protected Map<String, String> MATLABVariables = new HashMap<String, String>();
-
-    protected String MATLABScriptFileName;
-    protected FileWriter MATLABScriptFile;
-
-    protected int equationNumber = 1;
-    protected int numberOfMATLABVariables = 0;
+    // MATLAB utilities
+    Map<String, String> MATLABVariables = new HashMap<>();
+    FileWriter MATLABScriptFile;
+    int numberOfMATLABVariables = 0;
 
     // Thresholds
-    protected final int N = 20;
-    protected final int S = 20;
+    final int N = 20;
+    final int S = 20;
+
+    private int equationNumber = 1;
 
     /**
      * This function is used to retrieve a string containing a MATLAB variable corresponding to a specified CTMC state.
@@ -45,7 +44,7 @@ public abstract class CTMCResolverScriptGenerator {
      * This function, invoked after completion of equation building phase, is used to insert some MATLAB command
      * used for equation computation.
      */
-    void writeEquationComputationCommandsOnMATLABScript() throws IOException {
+    private void writeEquationComputationCommandsOnMATLABScript() throws IOException {
 
         this.MATLABScriptFile.write("solution = solve(");
 
@@ -90,7 +89,7 @@ public abstract class CTMCResolverScriptGenerator {
      *
      * @param classNumber - Class job which you want compute average population.
      */
-    protected void writeAverageNumberOfJobCloudletComputationCommandsOnMATLABScript(int classNumber) throws IOException {
+    void writeAverageNumberOfJobCloudletComputationCommandsOnMATLABScript(int classNumber) throws IOException {
 
         this.MATLABScriptFile.write("\n");
 
@@ -140,7 +139,7 @@ public abstract class CTMCResolverScriptGenerator {
     /**
      * Perform MATLAB script generation.
      */
-    protected void writeCTMCResolutionCommandsOnMATLABScript() throws IOException {
+    void writeCTMCResolutionCommandsOnMATLABScript() throws IOException {
 
         this.MATLABVariablesInit();
         this.MATLABScriptInit();

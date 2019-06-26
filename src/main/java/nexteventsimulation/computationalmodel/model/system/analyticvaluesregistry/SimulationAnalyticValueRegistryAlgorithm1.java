@@ -1,7 +1,6 @@
 package nexteventsimulation.computationalmodel.model.system.analyticvaluesregistry;
 
 import nexteventsimulation.utility.SimulationAnalyticValueRegistry;
-
 import java.util.HashMap;
 
 public class SimulationAnalyticValueRegistryAlgorithm1 extends SimulationAnalyticValueRegistry {
@@ -9,7 +8,7 @@ public class SimulationAnalyticValueRegistryAlgorithm1 extends SimulationAnalyti
     @Override
     protected void loadDataIntoRegistry() {
 
-        this.register = new HashMap<String, Double>();
+        this.register = new HashMap<>();
 
         // Cloudlet Time-Average Population
 
