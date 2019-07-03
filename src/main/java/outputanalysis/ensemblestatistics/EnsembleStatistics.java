@@ -1,7 +1,10 @@
 package outputanalysis.ensemblestatistics;
 
+import nexteventsimulation.computationalmodel.model.system.analyticvaluesregistry.LatexRegistry;
 import nexteventsimulation.utility.SimulationRegistry;
 import outputanalysis.Statistics;
+import outputanalysis.scatterplots.ScatterPlotPoint;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -30,6 +33,7 @@ class EnsembleStatistics {
         try {
             writeEnsembleOutputStatistic();
             writeEnsembleOutputStatisticForMATLABGraphics();
+            writeLatexTable();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,5 +102,26 @@ class EnsembleStatistics {
 
         output.flush();
         output.close();
+    }
+
+
+    private void writeLatexTable() {
+
+        double analyticalValue = SimulationRegistry.getInstance().getAnalyticalValueRegistry().getAnalyticalValue(this.name);
+        double distanceFromMean = this.ensembleStatistics.getConfidenceIntervalDistanceFromMean(0.95);
+
+        FileWriter output = null;
+        try {
+            output = new FileWriter(String.format("%s/latexTable.tex", SimulationRegistry.getInstance().getOutputDirectoryName()), true);
+
+            output.write(String.format(Locale.US, "%s & $%f$ & $\\pm$ & $%f$ & $ [%f,%f] $ & %f \\\\\n  &&&&&\\\\\\hline\n", LatexRegistry.getInstance().getLatexSymbol(this.name), this.ensembleStatistics.getMean(),
+                    distanceFromMean, this.ensembleStatistics.getMean() - distanceFromMean, this.ensembleStatistics.getMean() + distanceFromMean, analyticalValue));
+
+            output.flush();
+            output.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
